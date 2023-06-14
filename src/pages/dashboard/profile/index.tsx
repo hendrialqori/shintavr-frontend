@@ -1,5 +1,7 @@
 export default function Profile() {
   return (
-    <div>Profile</div>
+    <>
+    <h2 className="text-lg font-semibold">Profile Anda</h2>
+  </>
   )
 }

@@ -1,5 +1,7 @@
 export default function ListPendaftar() {
   return (
-    <div>List pendaftaran</div>
+    <>
+    <h2 className="text-lg font-semibold">List Pendaftar</h2>
+  </>
   )
 }

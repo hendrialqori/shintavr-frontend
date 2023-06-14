@@ -1,5 +1,7 @@
 export default function FormPendaftaran () {
   return (
-    <div>Form pendaftaran</div>
+    <>
+    <h2 className="text-lg font-semibold">Form Pendaftaran</h2>
+  </>
   )
 }

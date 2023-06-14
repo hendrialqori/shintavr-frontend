@@ -1,5 +1,7 @@
 export default function AllUser(){ 
   return (
-   <div>All User</div> 
+  <>
+    <h2 className="text-lg font-semibold">Semua user dan permission</h2>
+  </>
   )
 }

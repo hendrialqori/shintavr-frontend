@@ -24,6 +24,7 @@ export const InputPassword = ({ type = "password", ...rest }: Props) => {
         />
         <div
           role="button"
+          tabIndex={0}
           onClick={() => setSeePassword((prev) => !prev)}
           className="absolute text-lg top-2 right-2"
         >

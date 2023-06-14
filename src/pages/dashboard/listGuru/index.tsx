@@ -1,5 +1,7 @@
 export default function ListGuru() {
   return (
-    <div>ListGuru</div>
-  )
+    <>
+      <h2 className="text-lg font-semibold">List Guru</h2>
+    </>
+  );
 }

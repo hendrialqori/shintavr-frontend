@@ -34,7 +34,7 @@ function App() {
           {/* main content */}
           <Route path="/" element={<ProtectedRoute />}>
             <Route index element={<Onboarding />} />
-            <Route path="formulir" element={<Profile />} />
+            <Route path="formulir" element={<Formulir />} />
             <Route path="profile" element={<Profile />} />
             <Route path="list-pendaftar" element={<ListPendaftar />} />
             <Route path="list-guru" element={<ListGuru />} />
