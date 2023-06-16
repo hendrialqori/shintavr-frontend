@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { RxPerson } from "react-icons/rx";
-import { FaChalkboardTeacher } from "react-icons/fa";
+// import { FaChalkboardTeacher } from "react-icons/fa";
 import { BsFillPersonVcardFill, BsBuildingLock } from "react-icons/bs";
 import { FaWpforms, FaSchool } from "react-icons/fa";
 import { AiOutlineLogout } from "react-icons/ai";
@@ -32,11 +32,11 @@ export const Sidebar = () => {
           <Href to="/list-pendaftar" name="list pendaftar">
             <BsFillPersonVcardFill size={20} />
           </Href>
-          <Href to="/list-guru" name="list guru">
+          {/* <Href to="/list-guru" name="list guru">
             <FaChalkboardTeacher size={20} />
-          </Href>
+          </Href> */}
           <Href to="/all-user" name="setting permission">
-            <BsBuildingLock size={20} />
+                        <BsBuildingLock size={20} />
           </Href>
         </nav>
         <button

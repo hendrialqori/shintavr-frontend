@@ -45,3 +45,38 @@ Website pendaftaran sekolah SMA 1 Mandor
   - 
 }
 
+
+
+
+
+
+Module : {
+  1. Onboarding {
+    Galeri : Done
+    Pengumuman : Done
+    CRUD Modal : Undone
+    <!-- Tentang : Undone -->
+  }
+  2. Profile {
+    Detail: Done
+    Berkas: Done
+    CRUD Modal : Undone
+  }
+  3. Formulir {
+    form pendaftaran : Done
+    CRUD Modal : Undone
+  }
+  4. List Pendaftaran  {
+    table: Done
+    CRUD Modal : Undone
+  }
+  <!-- 5. List Guru {
+    table: Done
+  } -->
+  6. All user dan permission {
+    table: Done
+    CRUD Modal : undone
+  }
+  7. Login : Done
+  8. Register : Done
+}

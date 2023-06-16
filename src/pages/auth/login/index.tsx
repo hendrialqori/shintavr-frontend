@@ -27,9 +27,9 @@ export default function Login() {
       {/* {showModal ? <ModalInfomation message={errorMessage} /> : null} */}
 
       <div className="h-[100vh] w-full border-2 flex flex-col justify-center items-center">
-        <div className="p-4 w-11/12 md:w-4/12 border rounded-md shadow-sm">
+        <div className="p-4 w-11/12 md:w-6/12 lg:w-4/12 border rounded-md shadow-sm">
           <h1 className="text-lg font-bold mb-4">
-            Selamat datang calon siswa :)
+            Selamat datang :)
           </h1>
           <form onSubmit={handleSubmit} className="flex flex-col gap-2">
             <Input title="username" required />

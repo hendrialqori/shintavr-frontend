@@ -1,24 +1,39 @@
-import { LazyLoadImage } from "react-lazy-load-image-component";
-import "react-lazy-load-image-component/src/effects/blur.css";
+import { useState } from "react";
+import { Gallery } from "./gallery";
+import { Announcement } from "./announcement";
+import { ButtonTab } from "@/components/buttonTab";
+
+type Tabs = "GALLERY" | "ANNOUNCEMENT" ;
 
 export default function Onboarding() {
+  const [tab, setTab] = useState<Tabs>("GALLERY");
+
+  const handleMoveTab = (tab: Tabs) => () => {
+    setTab(tab);
+  };
+
   return (
     <>
       <h2 className="text-2xl font-semibold">
         Selamat Datang di website pendaftaran siswa baru !
       </h2>
-      <div className="grid grid-col-1 md:grid-col-2 lg:grid-cols-3 gap-1 mt-2">
-        {Array.from({ length: 4 }).map((_, i) => (
-          <LazyLoadImage
-            key={i}
-            className="border-2 object-cover lg:h-[400px] w-full rounded-md"
-            src={`/sekolah-0${i + 1}.jpeg`}
-            aria-label="avatar"
-            alt="avatar-onboarding"
-            effect="blur"
-          />
-        ))}
+      <div className="my-5 w-max flex gap-2" aria-label="tabs">
+        <ButtonTab
+          isActive={tab === "GALLERY"}
+          onClick={handleMoveTab("GALLERY")}
+        >
+          Galeri
+        </ButtonTab>
+        <ButtonTab
+          isActive={tab === "ANNOUNCEMENT"}
+          onClick={handleMoveTab("ANNOUNCEMENT")}
+        >
+          Pengumuman
+        </ButtonTab>
       </div>
+      {tab === "GALLERY" && <Gallery />}
+      {tab === 'ANNOUNCEMENT' && <Announcement />}
     </>
   );
 }
+

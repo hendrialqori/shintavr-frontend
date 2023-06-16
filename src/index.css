@@ -2,7 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-
 .lds-ellipsis {
   display: inline-block;
   position: relative;
@@ -57,4 +56,8 @@
   100% {
     transform: translate(24px, 0);
   }
+}
+
+[aria-label="banner"] {
+  background: linear-gradient(to left, #9795ef, #f9c5d1);
 }
