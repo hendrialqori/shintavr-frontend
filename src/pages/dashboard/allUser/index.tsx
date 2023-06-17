@@ -1,17 +1,31 @@
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { AiFillDelete, AiFillEdit } from "react-icons/ai";
+import { UserDelete } from "./userDelete";
+import { UserEdit } from "./userEdit";
+
+const initalValueUser = {
+  id: 0,
+  name: "",
+  permission: "",
+  openModal: false,
+};
 
 export default function AllUser() {
   const dummy = [
     {
       id: 0,
       nama_lengkap: "Hendri Alqori",
-      role: 'teacher'
+      role: "teacher",
     },
     {
       id: 1,
-      nama_lengkap: 'Yakuza',
-      role: 'student'
+      nama_lengkap: "Yakuza",
+      role: "student",
+    },
+    {
+      id: 3,
+      nama_lengkap: "Keeren",
+      role: "student",
     },
   ];
 
@@ -34,6 +48,46 @@ export default function AllUser() {
       },
     ];
   }, []);
+
+  const [isDelete, setDelete] = useState(initalValueUser);
+
+  const [isEdit, setEdit] = useState(initalValueUser);
+
+  const handleModalEdit = (
+    id: number = 0,
+    name: string,
+    permission: string,
+    type: "show" | "close"
+  ) => {
+    if (type === "show") {
+      setEdit({
+        id: id,
+        name: name,
+        permission: permission,
+        openModal: true,
+      });
+    } else {
+      setEdit(initalValueUser);
+    }
+  };
+
+  const handleModalDelete = (
+    id: number = 0,
+    name: string,
+    permission: string,
+    type: "show" | "close"
+  ) => {
+    if (type === "show") {
+      setDelete({
+        id: id,
+        name: name,
+        permission: permission,
+        openModal: true,
+      });
+    } else {
+      setDelete(initalValueUser);
+    }
+  };
 
   return (
     <>
@@ -64,10 +118,20 @@ export default function AllUser() {
                 {d.role}
               </div>
               <div className="rounded-md p-2 text-sm lg:text-lg font-light text-center flex gap-8 justify-center">
-                <button className="text-2xl lg:text-3xl">
+                <button
+                  onClick={() =>
+                    handleModalEdit(d.id, d.nama_lengkap, d.role, "show")
+                  }
+                  className="text-2xl lg:text-3xl"
+                >
                   <AiFillEdit />
                 </button>
-                <button className="text-2xl lg:text-3xl">
+                <button
+                  onClick={() =>
+                    handleModalDelete(d.id, d.nama_lengkap, d.role, "show")
+                  }
+                  className="text-2xl lg:text-3xl"
+                >
                   <AiFillDelete />
                 </button>
               </div>
@@ -90,16 +154,40 @@ export default function AllUser() {
               <h1 className="text-lg font-semibold">{d.role}</h1>
             </div>
             <div className="flex gap-4 dis" aria-label="action">
-              <button className="text-2xl lg:text-3xl bg-gray-500 rounded-md p-2 text-white">
+              <button
+                onClick={() =>
+                  handleModalEdit(d.id, d.nama_lengkap, d.role, "show")
+                }
+                className="text-2xl lg:text-3xl bg-gray-500 rounded-md p-2 text-white"
+              >
                 <AiFillEdit />
               </button>
-              <button className="text-2xl lg:text-3xl bg-gray-500 rounded-md p-2 text-white">
+              <button
+                onClick={() =>
+                  handleModalDelete(d.id, d.nama_lengkap, d.role, "show")
+                }
+                className="text-2xl lg:text-3xl bg-gray-500 rounded-md p-2 text-white"
+              >
                 <AiFillDelete />
               </button>
             </div>
           </div>
         ))}
       </div>
+
+      {isEdit.openModal ? (
+        <UserEdit
+          {...isEdit}
+          closeModal={() => handleModalEdit(0, "", "", "close")}
+        />
+      ) : null}
+
+      {isDelete.openModal ? (
+        <UserDelete
+          {...isDelete}
+          closeModal={() => handleModalDelete(0, "", "", "close")}
+        />
+      ) : null}
     </>
   );
 }

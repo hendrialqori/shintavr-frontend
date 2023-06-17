@@ -1,5 +1,8 @@
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { AiFillDelete, AiFillEdit } from "react-icons/ai";
+import { BerkasDelete } from "./berkasDelete";
+import { useNavigate } from "react-router-dom";
+import { Loading } from "@/components/loading";
 
 export default function ListPendaftar() {
   const dummy = [
@@ -49,8 +52,48 @@ export default function ListPendaftar() {
     ];
   }, []);
 
+  const navigate = useNavigate();
+
+  const [loadingBeforeEdit, setLoadingBeforeEdit] = useState(false);
+
+  const [isDelete, setDelete] = useState({
+    id: 0,
+    name: "",
+    openModal: false,
+  });
+
+  const handleEdit = (id: number) => () => {
+    setLoadingBeforeEdit(true);
+
+    setTimeout(() => {
+      navigate(`/formulir?isEdit=true&idEdit=${id}`);
+    }, 1500);
+  };
+
+  const handleModalDelete = (
+    id: number = 0,
+    name: string,
+    type: "show" | "close"
+  ) => {
+    if (type === "show") {
+      setDelete({
+        id: id,
+        name: name,
+        openModal: true,
+      });
+    } else {
+      setDelete({
+        id: 0,
+        name: "",
+        openModal: false,
+      });
+    }
+  };
+
   return (
     <>
+      {loadingBeforeEdit ? <Loading /> : null}
+
       <h2 className="text-lg font-semibold">List Pendaftar</h2>
       <div
         className="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-8 gap-3 mt-5"
@@ -89,7 +132,7 @@ export default function ListPendaftar() {
         />
       </div>
 
-      {/* if lg show */}
+      {/* tab and laptop version */}
       <div className="mt-4 hidden md:block" role="table">
         <div className="grid grid-cols-6 gap-1" aria-label="table-head">
           {thead.map((row, i) => (
@@ -100,7 +143,11 @@ export default function ListPendaftar() {
         </div>
         <div className="flex flex-col gap-1 mt-3" aria-label="table-data">
           {dummy.map((d, i) => (
-            <div key={i} className="grid grid-cols-6 gap-1" aria-label="table-head">
+            <div
+              key={i}
+              className="grid grid-cols-6 gap-1"
+              aria-label="table-head"
+            >
               <div className="rounded-md p-2 text-sm lg:text-lg font-light text-center">
                 {d.nama_lengkap}
               </div>
@@ -114,10 +161,18 @@ export default function ListPendaftar() {
                 {d.alamat}
               </div>
               <div className="rounded-md p-2 text-sm lg:text-lg font-light text-center flex gap-8 justify-center">
-                <button className="text-2xl lg:text-3xl">
+                <button
+                  onClick={handleEdit(d.id)}
+                  className="text-2xl lg:text-3xl"
+                >
                   <AiFillEdit />
                 </button>
-                <button className="text-2xl lg:text-3xl">
+                <button
+                  onClick={() =>
+                    handleModalDelete(d.id, d.nama_lengkap, "show")
+                  }
+                  className="text-2xl lg:text-3xl"
+                >
                   <AiFillDelete />
                 </button>
               </div>
@@ -125,40 +180,56 @@ export default function ListPendaftar() {
           ))}
         </div>
       </div>
+
+      {/* phone version */}
       <div className="flex flex-col gap-4 md:hidden mt-4">
-      {dummy.map((d, i) => (
-         <div
-         key={i}
-         className="bg-gray-100 p-5 w-full flex flex-col gap-3"
-         aria-label="card"
-       >
-         <div className="">
-           <div className="text-xs">Nama lengkap</div>
-           <h1 className="text-lg font-semibold">{d.nama_lengkap}</h1>
-         </div>
-         <div className="">
-           <div className="text-xs">Tempat, tanggal lahir</div>
-           <h1 className="text-lg font-semibold">{d.ttl}</h1>
-         </div>
-         <div className="">
-           <div className="text-xs">Asal Sekolah</div>
-           <h1 className="text-lg font-semibold">{d.asal_sekolah}</h1>
-         </div>
-         <div className="">
-           <div className="text-xs">Alamat</div>
-           <h1 className="text-lg font-semibold">{d.alamat}</h1>
-         </div>
-         <div className="flex gap-4 dis" aria-label="action">
-           <button className="text-2xl lg:text-3xl bg-gray-500 rounded-md p-2 text-white">
-             <AiFillEdit />
-           </button>
-           <button className="text-2xl lg:text-3xl bg-gray-500 rounded-md p-2 text-white">
-             <AiFillDelete />
-           </button>
-         </div>
-       </div>
-      ))}
+        {dummy.map((d, i) => (
+          <div
+            key={i}
+            className="bg-gray-100 p-5 w-full flex flex-col gap-3"
+            aria-label="card"
+          >
+            <div className="">
+              <div className="text-xs">Nama lengkap</div>
+              <h1 className="text-lg font-semibold">{d.nama_lengkap}</h1>
+            </div>
+            <div className="">
+              <div className="text-xs">Tempat, tanggal lahir</div>
+              <h1 className="text-lg font-semibold">{d.ttl}</h1>
+            </div>
+            <div className="">
+              <div className="text-xs">Asal Sekolah</div>
+              <h1 className="text-lg font-semibold">{d.asal_sekolah}</h1>
+            </div>
+            <div className="">
+              <div className="text-xs">Alamat</div>
+              <h1 className="text-lg font-semibold">{d.alamat}</h1>
+            </div>
+            <div className="flex gap-4 dis" aria-label="action">
+              <button
+                onClick={handleEdit(d.id)}
+                className="text-2xl lg:text-3xl bg-gray-500 rounded-md p-2 text-white"
+              >
+                <AiFillEdit />
+              </button>
+              <button
+                onClick={() => handleModalDelete(d.id, d.nama_lengkap, "show")}
+                className="text-2xl lg:text-3xl bg-gray-500 rounded-md p-2 text-white"
+              >
+                <AiFillDelete />
+              </button>
+            </div>
+          </div>
+        ))}
       </div>
+
+      {isDelete.openModal ? (
+        <BerkasDelete
+          id={isDelete.id}
+          name={isDelete.name}
+          closeModal={() => handleModalDelete(0, "", "close")}
+        />
+      ) : null}
     </>
   );
 }

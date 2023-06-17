@@ -1,34 +1,36 @@
 import { Loading } from "@/components/loading";
 import { ModalWrapper } from "@/components/modalWrapper";
 import { ModalChildrenWrapper } from "@/components/modalChildenWrapper";
+import { useState } from "react";
 
 type Props = {
-  loading?: boolean;
-  actionLogout: () => void;
-  actionCencel: () => void;
+  id: number;
+  closeModal: () => void;
 };
 
-export const Logout = ({
-  loading = false,
-  actionLogout,
-  actionCencel,
-}: Props) => {
+export const AnnouncementDelete = ({ id, closeModal }: Props) => {
+  const [isLoading, setLoading] = useState(false);
+  const handleDelete = () => {
+    alert(id)
+  };
   return (
     <>
-      {loading ? <Loading /> : null}
+      {isLoading ? <Loading /> : null}
       <ModalWrapper>
         <ModalChildrenWrapper>
-          <h1 className="text-lg text-center">Yakin keluar dari aplikasi ?</h1>
+          <h1 className="text-lg text-center">
+            Anda yakin ingin menghapus pengumuman ini ?
+          </h1>
           <div className="grid grid-cols-2 gap-2 mt-4">
             <button
               className="bg-gray-300 w-full py-2 rounded-md"
-              onClick={actionCencel}
+              onClick={closeModal}
             >
               Batal
             </button>
             <button
-              className="bg-gray-300 w-full py-2 rounded-md"
-              onClick={actionLogout}
+              className="bg-red-300 w-full py-2 rounded-md"
+              onClick={handleDelete}
             >
               Iya
             </button>

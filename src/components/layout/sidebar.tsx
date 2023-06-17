@@ -1,6 +1,5 @@
 import { Link } from "react-router-dom";
 import { RxPerson } from "react-icons/rx";
-// import { FaChalkboardTeacher } from "react-icons/fa";
 import { BsFillPersonVcardFill, BsBuildingLock } from "react-icons/bs";
 import { FaWpforms, FaSchool } from "react-icons/fa";
 import { AiOutlineLogout } from "react-icons/ai";
@@ -15,10 +14,10 @@ export const Sidebar = () => {
 
   return (
     <>
-      <aside className="w-20 h-screen flex flex-col justify-between p-4 bg-gray-100 z-[100]">
+      <aside className="w-14 lg:w-20 h-screen flex flex-col justify-between p-4 bg-gray-100 z-10">
         <nav className="flex flex-col items-center">
           <Link to="/">
-            <div className="bg-blue-800 rounded-lg text-white p-3 inline-block">
+            <div className="bg-blue-800 rounded-lg text-white p-2 lg:p-3 inline-block">
               <FaSchool size={20} />
             </div>
           </Link>
