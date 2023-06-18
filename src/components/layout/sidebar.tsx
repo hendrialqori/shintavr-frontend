@@ -1,8 +1,8 @@
-import { Link } from "react-router-dom";
 import { RxPerson } from "react-icons/rx";
 import { BsFillPersonVcardFill, BsBuildingLock } from "react-icons/bs";
 import { FaWpforms, FaSchool } from "react-icons/fa";
 import { AiOutlineLogout } from "react-icons/ai";
+import { VscFeedback } from "react-icons/vsc";
 import { Href } from "../href";
 import { Logout } from "@/pages/auth/logout";
 import { useState } from "react";
@@ -16,12 +16,9 @@ export const Sidebar = () => {
     <>
       <aside className="w-14 lg:w-20 h-screen flex flex-col justify-between p-4 bg-gray-100 z-10">
         <nav className="flex flex-col items-center">
-          <Link to="/">
-            <div className="bg-blue-800 rounded-lg text-white p-2 lg:p-3 inline-block">
-              <FaSchool size={20} />
-            </div>
-          </Link>
-          <span className="border-b-[1px] border-gray-200 w-full p-2" />
+          <Href to="/onboarding" name="onboarding" >
+            <FaSchool size={20} />
+          </Href>
           <Href to="/profile" name="profile">
             <RxPerson size={20} />
           </Href>
@@ -31,11 +28,11 @@ export const Sidebar = () => {
           <Href to="/list-pendaftar" name="list pendaftar">
             <BsFillPersonVcardFill size={20} />
           </Href>
-          {/* <Href to="/list-guru" name="list guru">
-            <FaChalkboardTeacher size={20} />
-          </Href> */}
+          <Href to="/feedback" name="feedback">
+            <VscFeedback size={20} />
+          </Href>
           <Href to="/all-user" name="setting permission">
-                        <BsBuildingLock size={20} />
+            <BsBuildingLock size={20} />
           </Href>
         </nav>
         <button

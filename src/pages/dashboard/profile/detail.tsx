@@ -26,9 +26,34 @@ export const Detail = () => {
       }).then(async (data) => {
         await updateDoc(doc(db_firestore, "announcement", data.id), {
           id: data.id,
-      });
+        });
         setLoading(false);
-        navigate("/?tab=announcement");
+        navigate("/onboarding?tab=announcement");
+      });
+    } catch (error) {
+      setLoading(false);
+      throw new Error(error as string);
+    }
+  };
+
+  const handleCreateFeedback = async (e: React.SyntheticEvent) => {
+    e.preventDefault();
+
+    const currentValue = e.target as HTMLInputElement & { value: string }[];
+
+    const message = currentValue[0].value;
+
+    try {
+      setLoading(true);
+      await addDoc(collection(db_firestore, "feedback"), {
+        message: message,
+        create_at: Date.now(),
+      }).then(async (data) => {
+        await updateDoc(doc(db_firestore, "feedback", data.id), {
+          id: data.id,
+        });
+        setLoading(false);
+        navigate("/feedback");
       });
     } catch (error) {
       setLoading(false);
@@ -71,6 +96,9 @@ export const Detail = () => {
             <AiFillEdit />
           </button>
 
+          <div className="mt-5">
+
+          {/* Pengumuman */}
           <form
             onSubmit={handleCreateAnnouncement}
             className="flex flex-col mt-6"
@@ -83,6 +111,19 @@ export const Detail = () => {
             />
             <button className="roundd-md p-2 bg-gray-200">Simpan</button>
           </form>
+
+          {/* feedback */}
+          <form onSubmit={handleCreateFeedback} className="flex flex-col mt-6">
+            <label htmlFor="feedback">Tulis feedback</label>
+            <textarea
+              className="border-none bg-gray-100 rounded-md p-4 my-2"
+              id="feedback"
+              required
+            />
+            <button className="roundd-md p-2 bg-gray-200">Simpan</button>
+          </form>
+          </div>
+
         </div>
       </div>
     </>

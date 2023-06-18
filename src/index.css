@@ -102,6 +102,7 @@
   }
 }
 
-[aria-label="banner"] {
+[aria-label="banner"],
+.index-href {
   background: linear-gradient(to left, #9795ef, #f9c5d1);
 }

@@ -2,15 +2,20 @@ import { useEffect, useState } from "react";
 import { Gallery } from "./gallery";
 import { Announcement } from "./announcement";
 import { ButtonTab } from "@/components/buttonTab";
-import { useSearchParams } from "react-router-dom";
-
+import { useSearchParams, useNavigate } from "react-router-dom";
 
 type Tabs = "GALLERY" | "ANNOUNCEMENT";
 
 export default function Onboarding() {
   const [tab, setTab] = useState<Tabs>("GALLERY");
 
+  const navigate = useNavigate();
+
   const [query] = useSearchParams();
+
+  useEffect(() => {
+    setTab((query.get("tab")?.toLocaleUpperCase() as Tabs) ?? "GALLERY");
+  }, []);
 
   useEffect(() => {
     if (query.get("tab") === "announcement") {
@@ -20,7 +25,8 @@ export default function Onboarding() {
 
   const handleMoveTab = (tab: Tabs) => () => {
     setTab(tab);
-  }
+    navigate("/onboarding?tab=" + tab.toLowerCase());
+  };
 
   return (
     <>

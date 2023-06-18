@@ -11,10 +11,9 @@ const firebaseConfig = {
   projectId: "shintavr-test",
   storageBucket: "shintavr-test.appspot.com",
   messagingSenderId: "35246929020",
-  appId: "1:35246929020:web:e96e1f841f2cde337785f9"
+  appId: "1:35246929020:web:e96e1f841f2cde337785f9",
 };
 
 // Initialize Firebase
 export const app = initializeApp(firebaseConfig);
-export const db_firestore = getFirestore(app
-  )
+export const db_firestore = getFirestore(app);

@@ -1,21 +1,20 @@
+import { Loading } from "@/components/loading";
 import { useEffect, useState } from "react";
-import { AiFillDelete, AiFillEdit } from "react-icons/ai";
-import { MdAnnouncement } from "react-icons/md";
-import { AnnouncementDelete } from "./announcementDelete";
-import { AnnouncementUpdate } from "./announcementEdit";
-import type { Announcement as TAnnouncement } from "@/types";
+import { AiFillDelete, AiFillEdit, AiOutlineMessage } from "react-icons/ai";
+import type { Feedback as TFeedback } from "@/types";
+import { FeedbackUpdate } from "./feedbackUpdate";
+import { FeedbackDelete } from "./feedbackDelete";
 import { collection, onSnapshot } from "firebase/firestore";
 import { db_firestore } from "@/configs/firebase";
-import dayjs from "dayjs";
-import { Loading } from "@/components/loading";
 
-export const Announcement = () => {
-  const [announcements, setAnnouncement] = useState<TAnnouncement[]>([]);
+export default function Feedback() {
+  const [feedbacks, setfeedback] = useState<TFeedback[]>([]);
 
   const [isLoading, setLoading] = useState(false);
 
   const [isDelete, setDelete] = useState({
     id: "",
+    person: "",
     openModal: false,
   });
 
@@ -27,15 +26,15 @@ export const Announcement = () => {
 
   useEffect(() => {
     const unSubscribe = onSnapshot(
-      collection(db_firestore, "announcement"),
+      collection(db_firestore, "feedback"),
       (snapshot) => {
         const dataMapping = snapshot.docs.map((doc) => {
           return {
             ...doc.data(),
           };
-        }) as unknown as TAnnouncement[];
+        }) as unknown as TFeedback[];
 
-        setAnnouncement(dataMapping);
+        setfeedback(dataMapping);
       },
       (error) => {
         throw new Error(error.message);
@@ -65,15 +64,21 @@ export const Announcement = () => {
     }
   };
 
-  const handleModalDelete = (id: string = "", type: "show" | "close") => {
+  const handleModalDelete = (
+    id: string = "",
+    person: string = "",
+    type: "show" | "close"
+  ) => {
     if (type === "show") {
       setDelete({
         id: id,
+        person: person,
         openModal: true,
       });
     } else {
       setDelete({
         id: "",
+        person: "",
         openModal: false,
       });
     }
@@ -82,34 +87,37 @@ export const Announcement = () => {
   return (
     <>
       {isLoading ? <Loading /> : null}
-      <div className="flex flex-col gap-2 mb-10">
-        {announcements.length === 0  ? <p className="font-semibold text-lg">Tidak ada pengumuman!</p> : null}
-        {announcements?.map((announcement, i) => (
+      <h2 className="text-lg font-semibold">Feedback</h2>
+      <div className="mt-5 flex flex-col gap-3">
+        {feedbacks.length === 0 ? (
+          <p className="font-semibold text-lg">Tidak ada feedback!</p>
+        ) : null}
+        {feedbacks?.map((feedback) => (
           <div
-            key={i}
-            className="flex flex-col gap-3 font-light border-[1px] rounded-md p-5 text-lg"
+            key={feedback.id}
+            className="flex flex-col gap-2 font-light border-[1px] rounded-md px-5 py-4 text-lg"
           >
             <div className="text-3xl">
-              <MdAnnouncement />
+              <AiOutlineMessage />
             </div>
-            <div role="textbox">{announcement.message}</div>
+            <h1 className="font-semibold">{feedback.person}</h1>
+            <div>{feedback.message}</div>
+            <p className="font-semibold text-sm">12 Mei</p>
             <div className="flex items-center justify-between">
-              <p className="text-sm font-semibold">{dayjs(announcement?.create_at).format('DD MMM')}</p>
+              <p className="text-sm font-semibold"></p>
               <div className="flex gap-4 dis" aria-label="action">
                 <button
                   onClick={() =>
-                    handleModalEdit(
-                      announcement.id,
-                      announcement.message,
-                      "show"
-                    )
+                    handleModalEdit(feedback.id, feedback.message, "show")
                   }
                   className="text-xl lg:text-2xl bg-gray-500 rounded-md p-2 text-white"
                 >
                   <AiFillEdit />
                 </button>
                 <button
-                  onClick={() => handleModalDelete(announcement.id, "show")}
+                  onClick={() =>
+                    handleModalDelete(feedback.id, feedback.person, "show")
+                  }
                   className="text-xl lg:text-2xl bg-gray-500 rounded-md p-2 text-white"
                 >
                   <AiFillDelete />
@@ -121,21 +129,22 @@ export const Announcement = () => {
       </div>
 
       {isEdit.openModal ? (
-        <AnnouncementUpdate
+        <FeedbackUpdate
           id={isEdit.id}
           message={isEdit.message}
-          closeModal={() => handleModalEdit("", "", "close")}
           setLoading={setLoading}
+          closeModal={() => handleModalEdit("", "", "close")}
         />
       ) : null}
 
       {isDelete.openModal ? (
-        <AnnouncementDelete
+        <FeedbackDelete
           id={isDelete.id}
-          closeModal={() => handleModalDelete("", "close")}
+          person={isDelete.person}
           setLoading={setLoading}
+          closeModal={() => handleModalDelete("", "", "close")}
         />
       ) : null}
     </>
   );
-};
+}

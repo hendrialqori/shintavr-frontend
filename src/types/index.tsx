@@ -21,3 +21,7 @@ export type Announcement = {
   message: string;
   create_at: string
 }
+
+export type Feedback = Announcement & {
+  person: string
+}

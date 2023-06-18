@@ -132,7 +132,7 @@ export default function ListPendaftar() {
             <p className="text-xs font-semibold mt-auto mb-4">SMP 1 Landak</p>
           </div>
         </div>
-        <div className="col-span-2 bg-pink-100 text-gray-700 rounded-md p-7">
+        <div className="col-span-2 bg-red-100 text-gray-700 rounded-md p-7">
           <h2 className="font-semibold tracking-wide">Gender terbanyak</h2>
           <div className="flex gap-1">
             <p className="text-[3rem] font-bold">49</p>
