@@ -1,40 +1,53 @@
-import { Loading } from "@/components/loading";
 import { ModalWrapper } from "@/components/modalWrapper";
 import { ModalChildrenWrapper } from "@/components/modalChildenWrapper";
-import { useState } from "react";
-import { Checkbox } from "@/components/checkbox";
 import { useForm } from "react-hook-form";
+import { doc, updateDoc } from "firebase/firestore";
+import { db_firestore } from "@/configs/firebase";
 
 type Props = {
-  id: number;
+  id: string;
   name: string;
   permission: string;
   openModal?: boolean; // tidak dipake
+  
   closeModal: () => void;
+  setLoading: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 type FormType = {
-  permission: string
-} 
+  permission: string;
+};
 
-export const UserEdit = ({ id, name, permission, closeModal }: Props) => {
-  const [isLoading, setLoading] = useState(false);
-
-  const { register, handleSubmit: submit, getValues } = useForm({
+export const UserEdit = ({
+  id,
+  name,
+  permission,
+  closeModal,
+  setLoading,
+}: Props) => {
+  const { register, handleSubmit: submit } = useForm<FormType>({
     defaultValues: {
       permission: permission,
     },
   });
 
-  const handleEdirPermission = submit((data) => {
-    alert(JSON.stringify({ id, permission: data.permission }));
+  const handleEdirPermission = submit(async (data) => {
+    setLoading(true);
+    try {
+      const userRef = doc(db_firestore, "users", id);
+      await updateDoc(userRef, {
+        role: data.permission,
+      });
+      setLoading(false);
+      closeModal();
+    } catch (error) {
+      setLoading(false);
+      throw new Error(error as string);
+    }
   });
-
-  getValues('permission')
 
   return (
     <>
-      {isLoading ? <Loading /> : null}
       <ModalWrapper>
         <ModalChildrenWrapper>
           <h1 className="flex items-center justify-center gap-1 text-md font-semibold text-center">
@@ -42,7 +55,10 @@ export const UserEdit = ({ id, name, permission, closeModal }: Props) => {
           </h1>
           <div className="flex justify-center items-center gap-3 my-5">
             <div className="flex flex-col items-center gap-2">
-              <label htmlFor="student" className={`text-sm bg-gray-100 rounded-md py-1 px-3 ${ getValues('permission') === ''}`}>
+              <label
+                htmlFor="student"
+                className={`text-sm bg-gray-100 rounded-md py-1 px-3 `}
+              >
                 Student
               </label>
               <input
@@ -53,7 +69,10 @@ export const UserEdit = ({ id, name, permission, closeModal }: Props) => {
               />
             </div>
             <div className="flex flex-col items-center gap-2">
-              <label htmlFor="teacher" className="text-sm bg-gray-100 rounded-md py-1 px-3">
+              <label
+                htmlFor="teacher"
+                className="text-sm bg-gray-100 rounded-md py-1 px-3"
+              >
                 Teacher
               </label>
               <input

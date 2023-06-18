@@ -1,29 +1,27 @@
-import { useMutation } from "@tanstack/react-query";
-import { useNavigate } from "react-router";
-import { useState } from "react";
-import { AxiosError } from "axios";
-import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
+// import { useNavigate } from "react-router";
+// import { useState } from "react";
+// import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
 import { Link } from "react-router-dom";
 import { Input } from "@/components/input";
 import { InputPassword } from "@/components/inputPassword";
-import { Loading } from "@/components/loading";
+// import { Loading } from "@/components/loading";
 
 export default function Register() {
-  const [showModal, setShowModal] = useState(false);
+  // const [showModal, setShowModal] = useState(false);
 
-  const [errorMessage, setErrorMessage] = useState("");
+  // const [errorMessage, setErrorMessage] = useState("");
 
-  const [seePassword, setSeePassword] = useState(false);
+  // const [seePassword, setSeePassword] = useState(false);
 
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
   const handleSubmit = (e: React.SyntheticEvent) => {
     e.preventDefault();
 
-    const currentValue = e.target as HTMLInputElement & { value: string }[];
+    // const currentValue = e.target as HTMLInputElement & { value: string }[];
 
-    const username = currentValue[0].value;
-    const password = currentValue[1].value;
+    // const username = currentValue[0].value;
+    // const password = currentValue[1].value;
   };
 
   return (

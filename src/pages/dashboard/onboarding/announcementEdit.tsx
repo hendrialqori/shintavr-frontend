@@ -1,31 +1,50 @@
-import { Loading } from "@/components/loading";
 import { ModalWrapper } from "@/components/modalWrapper";
 import { ModalChildrenWrapper } from "@/components/modalChildenWrapper";
-import { useState } from "react";
-import { useForm } from "react-hook-form";
 
-type Props = {
-  id: number;
+import { useForm } from "react-hook-form";
+import { doc, updateDoc } from "firebase/firestore";
+import { db_firestore } from "@/configs/firebase";
+import { useEffect } from "react";
+
+type Form = {
   message: string;
-  closeModal: () => void;
 };
 
-export const AnnouncementUpdate = ({ id, message, closeModal }: Props) => {
-  const [isLoading, setLoading] = useState(false);
+type Props = {
+  id: string;
+  message: string;
+  closeModal: () => void;
+  setLoading: React.Dispatch<React.SetStateAction<boolean>>;
+};
 
-  const { register, handleSubmit: submit } = useForm({
-    defaultValues: {
-      message: message,
-    },
-  });
+export const AnnouncementUpdate = ({
+  id,
+  message,
+  closeModal,
+  setLoading,
+}: Props) => {
+  const { register, handleSubmit: submit, setValue } = useForm<Form>();
 
-  const handleSubmit = submit((data) => {
-    alert(JSON.stringify({ id, data }));
+  useEffect(() => {
+    setValue("message", message);
+  }, []);
+
+  const handleSubmit = submit(async (data) => {
+    setLoading(true);
+    try {
+      await updateDoc(doc(db_firestore, "announcement", id), {
+        message: data.message,
+      });
+      setLoading(false);
+      closeModal();
+    } catch (error) {
+      setLoading(false);
+      throw new Error(error as string);
+    }
   });
 
   return (
     <>
-      {isLoading ? <Loading /> : null}
       <ModalWrapper>
         <ModalChildrenWrapper>
           <form onSubmit={handleSubmit}>
@@ -34,7 +53,7 @@ export const AnnouncementUpdate = ({ id, message, closeModal }: Props) => {
               rows={10}
               {...register("message")}
               className="border-none w-full rounded-md"
-              maxLength={10}
+              required
             />
             <div className="grid grid-cols-2 gap-2 mt-4">
               <button

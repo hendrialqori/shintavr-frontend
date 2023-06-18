@@ -1,26 +1,34 @@
-import { Loading } from "@/components/loading";
 import { ModalWrapper } from "@/components/modalWrapper";
 import { ModalChildrenWrapper } from "@/components/modalChildenWrapper";
-import { useState } from "react";
+import { deleteDoc, doc } from "firebase/firestore";
+import { db_firestore } from "@/configs/firebase";
 
 type Props = {
-  id: number;
+  id: string;
   name: string;
   closeModal: () => void;
+  setLoading: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-export const BerkasDelete = ({ id, name, closeModal }: Props) => {
-  const [isLoading, setLoading] = useState(false);
-  const handleDelete = () => {
-    alert(id);
+export const BerkasDelete = ({ id, name, closeModal, setLoading }: Props) => {
+  const handleDelete = async () => {
+    setLoading(true);
+    try {
+      await deleteDoc(doc(db_firestore, "registers-list", id));
+      setLoading(false);
+      closeModal();
+    } catch (error) {
+      setLoading(false);
+      throw new Error(error as string);
+    }
   };
   return (
     <>
-      {isLoading ? <Loading /> : null}
       <ModalWrapper>
         <ModalChildrenWrapper>
           <h1 className="text-lg text-center">
-            Anda yakin ingin menghapus data dari {name} ?
+            Anda yakin ingin menghapus data dari <br />{" "}
+            <span className="font-semibold">{name}</span> ?
           </h1>
           <div className="grid grid-cols-2 gap-2 mt-4">
             <button

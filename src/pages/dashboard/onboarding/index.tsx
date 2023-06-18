@@ -1,16 +1,26 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Gallery } from "./gallery";
 import { Announcement } from "./announcement";
 import { ButtonTab } from "@/components/buttonTab";
+import { useSearchParams } from "react-router-dom";
 
-type Tabs = "GALLERY" | "ANNOUNCEMENT" ;
+
+type Tabs = "GALLERY" | "ANNOUNCEMENT";
 
 export default function Onboarding() {
   const [tab, setTab] = useState<Tabs>("GALLERY");
 
+  const [query] = useSearchParams();
+
+  useEffect(() => {
+    if (query.get("tab") === "announcement") {
+      setTab("ANNOUNCEMENT");
+    }
+  }, [query.get("tab")]);
+
   const handleMoveTab = (tab: Tabs) => () => {
     setTab(tab);
-  };
+  }
 
   return (
     <>
@@ -32,8 +42,7 @@ export default function Onboarding() {
         </ButtonTab>
       </div>
       {tab === "GALLERY" && <Gallery />}
-      {tab === 'ANNOUNCEMENT' && <Announcement />}
+      {tab === "ANNOUNCEMENT" && <Announcement />}
     </>
   );
 }
-

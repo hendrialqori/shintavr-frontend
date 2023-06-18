@@ -1,25 +1,25 @@
-import { useNavigate } from "react-router";
-import { useState } from "react";
+// import { useNavigate } from "react-router";
+// import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Input } from "@/components/input";
 import { InputPassword } from "@/components/inputPassword";
 
 export default function Login() {
-  const [showModal, setShowModal] = useState(false);
+  // const [showModal, setShowModal] = useState(false);
 
-  const [errorMessage, setErrorMessage] = useState("");
+  // const [errorMessage, setErrorMessage] = useState("");
 
-  const [seePassword, setSeePassword] = useState(false);
+  // const [seePassword, setSeePassword] = useState(false);
 
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
   const handleSubmit = (e: React.SyntheticEvent) => {
     e.preventDefault();
 
-    const currentValue = e.target as HTMLInputElement & { value: string }[];
+    // const currentValue = e.target as HTMLInputElement & { value: string }[];
 
-    const username = currentValue[0].value;
-    const password = currentValue[1].value;
+    // const username = currentValue[0].value;
+    // const password = currentValue[1].value;
   };
 
   return (
@@ -28,9 +28,7 @@ export default function Login() {
 
       <div className="h-[100vh] w-full border-2 flex flex-col justify-center items-center">
         <div className="p-4 w-11/12 md:w-6/12 lg:w-4/12 border rounded-md shadow-sm">
-          <h1 className="text-lg font-bold mb-4">
-            Selamat datang :)
-          </h1>
+          <h1 className="text-lg font-bold mb-4">Selamat datang :)</h1>
           <form onSubmit={handleSubmit} className="flex flex-col gap-2">
             <Input title="username" required />
             <InputPassword />
@@ -41,6 +39,23 @@ export default function Login() {
             >
               Login
             </button>
+
+            <div className="grid grid-cols-7 items-center my-5 ">
+              <div className="col-span-3 h-[0.10rem] w-full bg-gray-200" />
+              <p className="text-xs text-center col-span-1">atau</p>
+              <div className="col-span-3 h-[0.10rem] w-full bg-gray-200" />
+            </div>
+
+            <div className="cursor-pointer" role="button">
+              <div className="flex items-center justify-center gap-3">
+                <img
+                  className="h-10 w-10 bg-gray-100 rounded-md"
+                  src="google.svg"
+                  alt="google-icon"
+                />
+                <p className="font-light">Login dengan google</p>
+              </div>
+            </div>
           </form>
         </div>
         <div

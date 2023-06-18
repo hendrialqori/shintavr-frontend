@@ -1,27 +1,13 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { AiFillDelete, AiFillEdit } from "react-icons/ai";
 import { BerkasDelete } from "./berkasDelete";
 import { useNavigate } from "react-router-dom";
 import { Loading } from "@/components/loading";
+import { onSnapshot, collection } from "firebase/firestore";
+import { db_firestore } from "@/configs/firebase";
+import { Register } from "@/types";
 
 export default function ListPendaftar() {
-  const dummy = [
-    {
-      id: 0,
-      nama_lengkap: "Hendri Alqori",
-      ttl: "Mandor, 8 September 2000",
-      asal_sekolah: "SMP N 1 Mandor",
-      alamat: "Mandor",
-    },
-    {
-      id: 1,
-      nama_lengkap: "Ajeng",
-      ttl: "Mandor, 8 September 2000",
-      asal_sekolah: "SMP N 1 Mandor",
-      alamat: "Mandor",
-    },
-  ];
-
   const thead = useMemo(() => {
     return [
       {
@@ -54,15 +40,41 @@ export default function ListPendaftar() {
 
   const navigate = useNavigate();
 
+  const [listRegister, setListRegister] = useState<Register[]>([]);
+
   const [loadingBeforeEdit, setLoadingBeforeEdit] = useState(false);
 
+  const [isLoading, setLoading] = useState(false);
+
+  const [search, setSearch] = useState("");
+
+  useEffect(() => {
+    const unSubscribe = onSnapshot(
+      collection(db_firestore, "registers-list"),
+      (snapshot) => {
+        const dataMapping = snapshot.docs.map((doc) => {
+          return {
+            ...doc.data(),
+          };
+        }) as unknown as Register[];
+
+        setListRegister(dataMapping);
+      },
+      (error) => {
+        throw new Error(error.message);
+      }
+    );
+
+    return () => unSubscribe();
+  }, []);
+
   const [isDelete, setDelete] = useState({
-    id: 0,
+    id: "",
     name: "",
     openModal: false,
   });
 
-  const handleEdit = (id: number) => () => {
+  const handleEdit = (id: string) => () => {
     setLoadingBeforeEdit(true);
 
     setTimeout(() => {
@@ -71,7 +83,7 @@ export default function ListPendaftar() {
   };
 
   const handleModalDelete = (
-    id: number = 0,
+    id: string = "",
     name: string,
     type: "show" | "close"
   ) => {
@@ -83,17 +95,21 @@ export default function ListPendaftar() {
       });
     } else {
       setDelete({
-        id: 0,
+        id: "",
         name: "",
         openModal: false,
       });
     }
   };
 
+  const registersMemoize = useMemo(() => {
+    return listRegister.filter((data) => data.fullname.toLowerCase().includes(search));
+  }, [search, listRegister]);
+
   return (
     <>
       {loadingBeforeEdit ? <Loading /> : null}
-
+      {isLoading ? <Loading /> : null}
       <h2 className="text-lg font-semibold">List Pendaftar</h2>
       <div
         className="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-8 gap-3 mt-5"
@@ -101,7 +117,7 @@ export default function ListPendaftar() {
       >
         <div className="col-span-2 bg-blue-100 text-gray-700 rounded-md p-7">
           <h2 className="font-semibold tracking-wide">Siswa Terdaftar</h2>
-          <p className="text-[3rem] font-bold">78</p>
+          <p className="text-[3rem] font-bold">{listRegister?.length}</p>
         </div>
         <div className="col-span-2 bg-green-100 text-gray-700 rounded-md p-7">
           <h2 className="font-semibold tracking-wide">Nilai ujian Tertinggi</h2>
@@ -126,6 +142,8 @@ export default function ListPendaftar() {
       </div>
       <div className="mt-8">
         <input
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
           type="search"
           className="font-light text-md lg:text-lg border-none bg-gray-100 rounded-md p-3"
           placeholder="cari pendaftar"
@@ -142,34 +160,34 @@ export default function ListPendaftar() {
           ))}
         </div>
         <div className="flex flex-col gap-1 mt-3" aria-label="table-data">
-          {dummy.map((d, i) => (
+          {registersMemoize?.map((register, i) => (
             <div
               key={i}
               className="grid grid-cols-6 gap-1"
               aria-label="table-head"
             >
               <div className="rounded-md p-2 text-sm lg:text-lg font-light text-center">
-                {d.nama_lengkap}
+                {register.fullname}
               </div>
               <div className="rounded-md p-2 text-sm lg:text-lg font-light text-center col-span-2">
-                {d.ttl}
+                {register.dob}
               </div>
               <div className="rounded-md p-2 text-sm lg:text-lg font-light text-center">
-                {d.asal_sekolah}
+                {register.origin_school}
               </div>
               <div className="rounded-md p-2 text-sm lg:text-lg font-light text-center">
-                {d.alamat}
+                {register.address}
               </div>
               <div className="rounded-md p-2 text-sm lg:text-lg font-light text-center flex gap-8 justify-center">
                 <button
-                  onClick={handleEdit(d.id)}
+                  onClick={handleEdit(register.id)}
                   className="text-2xl lg:text-3xl"
                 >
                   <AiFillEdit />
                 </button>
                 <button
                   onClick={() =>
-                    handleModalDelete(d.id, d.nama_lengkap, "show")
+                    handleModalDelete(register.id, register.fullname, "show")
                   }
                   className="text-2xl lg:text-3xl"
                 >
@@ -183,7 +201,7 @@ export default function ListPendaftar() {
 
       {/* phone version */}
       <div className="flex flex-col gap-4 md:hidden mt-4">
-        {dummy.map((d, i) => (
+        {registersMemoize.map((register, i) => (
           <div
             key={i}
             className="bg-gray-100 p-5 w-full flex flex-col gap-3"
@@ -191,29 +209,33 @@ export default function ListPendaftar() {
           >
             <div className="">
               <div className="text-xs">Nama lengkap</div>
-              <h1 className="text-lg font-semibold">{d.nama_lengkap}</h1>
+              <h1 className="text-lg font-semibold">{register.fullname}</h1>
             </div>
             <div className="">
               <div className="text-xs">Tempat, tanggal lahir</div>
-              <h1 className="text-lg font-semibold">{d.ttl}</h1>
+              <h1 className="text-lg font-semibold">{register.dob}</h1>
             </div>
             <div className="">
               <div className="text-xs">Asal Sekolah</div>
-              <h1 className="text-lg font-semibold">{d.asal_sekolah}</h1>
+              <h1 className="text-lg font-semibold">
+                {register.origin_school}
+              </h1>
             </div>
             <div className="">
               <div className="text-xs">Alamat</div>
-              <h1 className="text-lg font-semibold">{d.alamat}</h1>
+              <h1 className="text-lg font-semibold">{register.address}</h1>
             </div>
             <div className="flex gap-4 dis" aria-label="action">
               <button
-                onClick={handleEdit(d.id)}
+                onClick={handleEdit(register.id)}
                 className="text-2xl lg:text-3xl bg-gray-500 rounded-md p-2 text-white"
               >
                 <AiFillEdit />
               </button>
               <button
-                onClick={() => handleModalDelete(d.id, d.nama_lengkap, "show")}
+                onClick={() =>
+                  handleModalDelete(register.id, register.fullname, "show")
+                }
                 className="text-2xl lg:text-3xl bg-gray-500 rounded-md p-2 text-white"
               >
                 <AiFillDelete />
@@ -227,7 +249,8 @@ export default function ListPendaftar() {
         <BerkasDelete
           id={isDelete.id}
           name={isDelete.name}
-          closeModal={() => handleModalDelete(0, "", "close")}
+          closeModal={() => handleModalDelete("", "", "close")}
+          setLoading={setLoading}
         />
       ) : null}
     </>

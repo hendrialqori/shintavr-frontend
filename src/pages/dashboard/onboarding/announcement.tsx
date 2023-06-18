@@ -1,36 +1,52 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { AiFillDelete, AiFillEdit } from "react-icons/ai";
 import { MdAnnouncement } from "react-icons/md";
 import { AnnouncementDelete } from "./announcementDelete";
 import { AnnouncementUpdate } from "./announcementEdit";
-
-const dummy = [
-  {
-    message:
-      "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Delenitimodi, molestias doloribus officia consequatur neque enim suscipittempore. Aliquam quis rerum laboriosam minima magni saepe sunt fugitarchitecto quasi maiores?",
-    date: "12 Mei",
-  },
-  {
-    message:
-      "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Delenitimodi, molestias doloribus officia consequatur neque enim suscipittempore. Aliquam quis rerum laboriosam minima magni saepe sunt fugitarchitecto quasi maiores?",
-    date: "13 Mei",
-  },
-];
+import type { Announcement as TAnnouncement } from "@/types";
+import { collection, onSnapshot } from "firebase/firestore";
+import { db_firestore } from "@/configs/firebase";
+import dayjs from "dayjs";
+import { Loading } from "@/components/loading";
 
 export const Announcement = () => {
+  const [announcements, setAnnouncement] = useState<TAnnouncement[]>([]);
+
+  const [isLoading, setLoading] = useState(false);
+
   const [isDelete, setDelete] = useState({
-    id: 0,
+    id: "",
     openModal: false,
   });
 
   const [isEdit, setEdit] = useState({
-    id: 0,
+    id: "",
     openModal: false,
     message: "",
   });
 
+  useEffect(() => {
+    const unSubscribe = onSnapshot(
+      collection(db_firestore, "announcement"),
+      (snapshot) => {
+        const dataMapping = snapshot.docs.map((doc) => {
+          return {
+            ...doc.data(),
+          };
+        }) as unknown as TAnnouncement[];
+
+        setAnnouncement(dataMapping);
+      },
+      (error) => {
+        throw new Error(error.message);
+      }
+    );
+
+    return () => unSubscribe();
+  }, []);
+
   const handleModalEdit = (
-    id: number = 0,
+    id: string = "",
     message: string = "",
     type: "show" | "close"
   ) => {
@@ -38,18 +54,18 @@ export const Announcement = () => {
       setEdit({
         id: id,
         openModal: true,
-        message: message
+        message: message,
       });
     } else {
       setEdit({
-        id: 0,
+        id: "",
         openModal: false,
         message: "",
       });
     }
   };
 
-  const handleModalDelete = (id: number = 0, type: "show" | "close") => {
+  const handleModalDelete = (id: string = "", type: "show" | "close") => {
     if (type === "show") {
       setDelete({
         id: id,
@@ -57,7 +73,7 @@ export const Announcement = () => {
       });
     } else {
       setDelete({
-        id: 0,
+        id: "",
         openModal: false,
       });
     }
@@ -65,8 +81,10 @@ export const Announcement = () => {
 
   return (
     <>
+      {isLoading ? <Loading /> : null}
       <div className="flex flex-col gap-2">
-        {dummy.map((announcement, i) => (
+        {announcements.length === 0  ? <p className="font-semibold text-lg">Tidak ada pengumuman!</p> : null}
+        {announcements?.map((announcement, i) => (
           <div
             key={i}
             className="flex flex-col gap-3 font-light border-[1px] rounded-md p-5 text-lg"
@@ -74,20 +92,24 @@ export const Announcement = () => {
             <div className="text-3xl">
               <MdAnnouncement />
             </div>
-            {announcement.message}
+            <div role="textbox">{announcement.message}</div>
             <div className="flex items-center justify-between">
-              <p className="text-sm font-semibold">{announcement.date}</p>
+              <p className="text-sm font-semibold">{dayjs(announcement?.create_at).format('DD MMM')}</p>
               <div className="flex gap-4 dis" aria-label="action">
                 <button
                   onClick={() =>
-                    handleModalEdit(i, announcement.message, "show")
+                    handleModalEdit(
+                      announcement.id,
+                      announcement.message,
+                      "show"
+                    )
                   }
                   className="text-2xl lg:text-3xl bg-gray-500 rounded-md p-2 text-white"
                 >
                   <AiFillEdit />
                 </button>
                 <button
-                  onClick={() => handleModalDelete(i, "show")}
+                  onClick={() => handleModalDelete(announcement.id, "show")}
                   className="text-2xl lg:text-3xl bg-gray-500 rounded-md p-2 text-white"
                 >
                   <AiFillDelete />
@@ -102,14 +124,16 @@ export const Announcement = () => {
         <AnnouncementUpdate
           id={isEdit.id}
           message={isEdit.message}
-          closeModal={() => handleModalEdit(0, "", "close")}
+          closeModal={() => handleModalEdit("", "", "close")}
+          setLoading={setLoading}
         />
       ) : null}
 
       {isDelete.openModal ? (
         <AnnouncementDelete
           id={isDelete.id}
-          closeModal={() => handleModalDelete(0, "close")}
+          closeModal={() => handleModalDelete("", "close")}
+          setLoading={setLoading}
         />
       ) : null}
     </>
