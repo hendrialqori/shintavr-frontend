@@ -5,6 +5,9 @@ import { Loading } from "@/components/loading";
 import { doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
 import { db_firestore } from "@/configs/firebase";
 import { useNavigate } from "react-router-dom";
+import { userCredential } from "@/store";
+import { useRecoilValue } from "recoil";
+import { v4 as uuidv4 } from 'uuid';
 
 type Form = {
   fullname: string;
@@ -16,6 +19,11 @@ type Form = {
 };
 
 export default function FormPendaftaran() {
+
+  const UUID = (uuidv4() as any).replaceAll('-', '').slice(0, 15)
+
+  const credential = useRecoilValue(userCredential)
+
   const { register, handleSubmit: submit, setValue } = useForm<Form>();
 
   const [query] = useSearchParams();
@@ -77,16 +85,17 @@ export default function FormPendaftaran() {
           doc(
             db_firestore,
             "registers-list",
-            data.fullname.replace(/\s/g, "").toLocaleLowerCase()
+            UUID
           ),
           {
-            id: data.fullname.replace(/\s/g, "").toLocaleLowerCase(),
+            id: UUID,
             fullname: data.fullname,
             dob: data.dob,
             gender: data.gender,
             origin_school: data.origin_school,
             address: data.address,
             quotes: data.quotes,
+            creator_id: credential.username
           }
         );
       }
@@ -181,7 +190,7 @@ export default function FormPendaftaran() {
           </div>
         </div>
         <button
-          className="bg-gray-100 hover:bg-gray-300 py-4 rounded-lg"
+          className="bg-blue-400 hover:bg-blue-300 py-4 rounded-lg text-white"
           type="submit"
         >
           Simpan

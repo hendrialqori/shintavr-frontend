@@ -5,10 +5,16 @@ export default {
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        dark: '#18191a',
+        dark2: '#252329'
+      }
+    },
   },
   plugins: [
     require('@tailwindcss/forms')
   ],
+  darkMode: ["class", '[data-mode="dark"]']
 }
 

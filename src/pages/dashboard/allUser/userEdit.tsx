@@ -57,7 +57,7 @@ export const UserEdit = ({
             <div className="flex flex-col items-center gap-2">
               <label
                 htmlFor="student"
-                className={`text-sm bg-gray-100 rounded-md py-1 px-3 `}
+                className={`text-sm bg-gray-100 rounded-md py-1 px-3`}
               >
                 Student
               </label>
@@ -83,7 +83,7 @@ export const UserEdit = ({
               />
             </div>
           </div>
-          <div className="grid grid-cols-2 gap-2 mt-4">
+          <div className="flex w-6/12 mx-auto gap-2 mt-4">
             <button
               className="bg-gray-300 w-full py-2 rounded-md"
               onClick={closeModal}
@@ -91,7 +91,7 @@ export const UserEdit = ({
               Batal
             </button>
             <button
-              className="bg-blue-300 w-full py-2 rounded-md"
+              className="bg-blue-300 w-full py-2 rounded-md text-white"
               onClick={handleEdirPermission}
             >
               Simpan

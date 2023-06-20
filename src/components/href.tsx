@@ -18,7 +18,7 @@ export const Href = ({ to = "/", index, name, children }: Props) => {
       <Link to={to} data-tooltip-id="my-tooltip" data-tooltip-content={name}>
         <div
           className={`${
-           index ? 'index-href' : pathname.includes(to) ? "bg-blue-400 text-white" : "bg-gray-100"
+           index ? 'index-href' : pathname.includes(to) ? "bg-blue-400 text-white" : "bg-gray-100 dark:bg-gray-300"
           } rounded-lg p-3 inline-block my-4`}
         >
           {children}

@@ -7,7 +7,7 @@ export const Gallery = () => {
       {Array.from({ length: 4 }).map((_, i) => (
         <LazyLoadImage
           key={i}
-          className="border-2 object-cover lg:h-[400px] w-full rounded-md"
+          className="border-2 dark:border-none object-cover lg:h-[400px] w-full rounded-md"
           src={`/sekolah-0${i + 1}.jpeg`}
           aria-label="avatar"
           alt="avatar-onboarding"

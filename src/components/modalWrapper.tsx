@@ -14,7 +14,7 @@ export const ModalWrapper: React.FC<Props> = memo(({ children }) => {
       initial="hidden"
       animate="show"
       exit="hidden"
-      className="fixed inset-0 flex items-center justify-center bg-black/20 z-20
+      className="fixed inset-0 flex items-center justify-center bg-black/20 dark:bg-black/50 z-20
       "
       role="dialog"
       aria-modal="true"

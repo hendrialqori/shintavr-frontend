@@ -6,8 +6,13 @@ import { FeedbackUpdate } from "./feedbackUpdate";
 import { FeedbackDelete } from "./feedbackDelete";
 import { collection, onSnapshot } from "firebase/firestore";
 import { db_firestore } from "@/configs/firebase";
+import { useRecoilValue } from "recoil";
+import { userCredential } from "@/store";
+import dayjs from "dayjs";
 
 export default function Feedback() {
+  const credential = useRecoilValue(userCredential);
+
   const [feedbacks, setfeedback] = useState<TFeedback[]>([]);
 
   const [isLoading, setLoading] = useState(false);
@@ -87,42 +92,45 @@ export default function Feedback() {
   return (
     <>
       {isLoading ? <Loading /> : null}
-      <h2 className="text-lg font-semibold">Feedback</h2>
+      <h2 className="text-lg font-semibold dark:text-gray-100">Feedback</h2>
       <div className="mt-5 flex flex-col gap-3">
         {feedbacks.length === 0 ? (
-          <p className="font-semibold text-lg">Tidak ada feedback!</p>
+          <p className="font-semibold text-lg dark:text-gray-100">Tidak ada feedback!</p>
         ) : null}
         {feedbacks?.map((feedback) => (
           <div
             key={feedback.id}
-            className="flex flex-col gap-2 font-light border-[1px] rounded-md px-5 py-4 text-lg"
+            className="flex flex-col gap-2 font-light border-[1px] dark:border-none rounded-md px-5 py-4 text-lg dark:text-white dark:bg-dark2"
           >
-            <div className="text-3xl">
+            <div className="text-3xl text-blue-400">
               <AiOutlineMessage />
             </div>
             <h1 className="font-semibold">{feedback.person}</h1>
             <div>{feedback.message}</div>
-            <p className="font-semibold text-sm">12 Mei</p>
-            <div className="flex items-center justify-between">
-              <p className="text-sm font-semibold"></p>
-              <div className="flex gap-4 dis" aria-label="action">
-                <button
-                  onClick={() =>
-                    handleModalEdit(feedback.id, feedback.message, "show")
-                  }
-                  className="text-xl lg:text-2xl bg-gray-500 rounded-md p-2 text-white"
-                >
-                  <AiFillEdit />
-                </button>
-                <button
-                  onClick={() =>
-                    handleModalDelete(feedback.id, feedback.person, "show")
-                  }
-                  className="text-xl lg:text-2xl bg-gray-500 rounded-md p-2 text-white"
-                >
-                  <AiFillDelete />
-                </button>
-              </div>
+            <p className="font-semibold text-sm">
+              {dayjs(feedback.create_at).format("DD MMM")}
+            </p>
+            <div className="flex items-center justify-end">
+              {feedback.creator_id === credential.username ? (
+                <div className="flex gap-4 dis" aria-label="action">
+                  <button
+                    onClick={() =>
+                      handleModalEdit(feedback.id, feedback.message, "show")
+                    }
+                    className="text-xl lg:text-2xl bg-gray-500 rounded-md p-2 text-white"
+                  >
+                    <AiFillEdit />
+                  </button>
+                  <button
+                    onClick={() =>
+                      handleModalDelete(feedback.id, feedback.person, "show")
+                    }
+                    className="text-xl lg:text-2xl bg-gray-500 rounded-md p-2 text-white"
+                  >
+                    <AiFillDelete />
+                  </button>
+                </div>
+              ) : null}
             </div>
           </div>
         ))}

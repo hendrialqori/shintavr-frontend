@@ -30,7 +30,7 @@ export default function Onboarding() {
 
   return (
     <>
-      <h2 className="text-2xl font-semibold">
+      <h2 className="text-2xl font-semibold dark:text-gray-200">
         Selamat Datang di website pendaftaran siswa baru !
       </h2>
       <div className="my-5 w-max flex gap-2" aria-label="tabs">

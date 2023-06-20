@@ -1,8 +1,20 @@
-import { lazy } from "react";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { lazy, useEffect, useState } from "react";
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+  Navigate,
+  Outlet,
+} from "react-router-dom";
 import { Suspense } from "react";
 import { ProtectedRoute } from "./components/protectedRoute";
 import { Loading } from "./components/loading";
+import { loginThrough, userCredential } from "./store";
+import { useSetRecoilState } from "recoil";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { app, db_firestore } from "./configs/firebase";
+import { doc, getDoc } from "firebase/firestore";
+import { UserCredential } from "./types";
 
 // auth
 const Login = lazy(async () => await import("@/pages/auth/login"));
@@ -29,6 +41,7 @@ function App() {
       <BrowserRouter>
         <Routes>
           {/* auth */}
+
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
 

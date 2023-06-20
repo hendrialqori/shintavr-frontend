@@ -9,7 +9,7 @@ export const InputPassword = ({ type = "password", ...rest }: Props) => {
   return (
     <div className="flex flex-col gap-1" aria-label="password-field">
       <label
-        className="text-sm font-light tracking-wide text-gray-700"
+        className="font-light tracking-wide text-gray-700"
         htmlFor="password"
       >
         password
@@ -17,7 +17,7 @@ export const InputPassword = ({ type = "password", ...rest }: Props) => {
       <div className="relative w-full">
         <input
           {...rest}
-          className="p-2 text-sm w-full rounded-md bg-gray-200 focus:border-blue-100 border-none"
+          className="p-2 text-lg w-full rounded-md bg-gray-200 focus:border-blue-100 border-none"
           type={seePassword ? "text" : "password"}
           id="password"
           required
@@ -26,7 +26,7 @@ export const InputPassword = ({ type = "password", ...rest }: Props) => {
           role="button"
           tabIndex={0}
           onClick={() => setSeePassword((prev) => !prev)}
-          className="absolute text-lg top-2 right-2"
+          className="absolute text-2xl top-2 right-2"
         >
           {seePassword ? <AiFillEyeInvisible /> : <AiFillEye />}
         </div>

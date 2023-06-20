@@ -1,11 +1,18 @@
 import { useEffect, useMemo, useState } from "react";
-import { AiFillDelete, AiFillEdit } from "react-icons/ai";
+import {
+  AiOutlineDoubleLeft,
+  AiOutlineDoubleRight,
+} from "react-icons/ai";
 import { BerkasDelete } from "./berkasDelete";
 import { useNavigate } from "react-router-dom";
 import { Loading } from "@/components/loading";
 import { onSnapshot, collection } from "firebase/firestore";
 import { db_firestore } from "@/configs/firebase";
 import { Register } from "@/types";
+import { useRecoilValue } from "recoil";
+import { userCredential } from "@/store";
+import { CgTrashEmpty } from "react-icons/cg";
+import { LuEdit2 } from "react-icons/lu";
 
 export default function ListPendaftar() {
   const thead = useMemo(() => {
@@ -13,30 +20,32 @@ export default function ListPendaftar() {
       {
         title: "Name Lengkap",
         className:
-          "bg-gray-100 rounded-md p-2 text-sm lg:text-lg font-light text-center",
+          "bg-gray-300 dark:bg-dark2 dark:text-white rounded-md p-2 text-sm lg:text-lg font-light text-center",
       },
       {
         title: "Tempat, tanggal lahir",
         className:
-          "bg-gray-100 rounded-md p-2 text-sm lg:text-lg font-light text-center col-span-2",
+          "bg-gray-300 dark:bg-dark2 dark:text-white rounded-md p-2 text-sm lg:text-lg font-light text-center col-span-2",
       },
       {
         title: "Asal Sekolah",
         className:
-          "bg-gray-100 rounded-md p-2 text-sm lg:text-lg font-light text-center",
+          "bg-gray-300 dark:bg-dark2 dark:text-white rounded-md p-2 text-sm lg:text-lg font-light text-center",
       },
       {
         title: "Alamat",
         className:
-          "bg-gray-100 rounded-md p-2 text-sm lg:text-lg font-light text-center",
+          "bg-gray-300 dark:bg-dark2 dark:text-white rounded-md p-2 text-sm lg:text-lg font-light text-center",
       },
       {
         title: "Action",
         className:
-          "bg-gray-100 rounded-md p-2 text-sm lg:text-lg font-light text-center",
+          "bg-gray-300 dark:bg-dark2 dark:text-white rounded-md p-2 text-sm lg:text-lg font-light text-center",
       },
     ];
   }, []);
+
+  const credential = useRecoilValue(userCredential);
 
   const navigate = useNavigate();
 
@@ -103,7 +112,9 @@ export default function ListPendaftar() {
   };
 
   const registersMemoize = useMemo(() => {
-    return listRegister.filter((data) => data.fullname.toLowerCase().includes(search));
+    return listRegister.filter((data) =>
+      data.fullname.toLowerCase().includes(search)
+    );
   }, [search, listRegister]);
 
   return (
@@ -115,15 +126,15 @@ export default function ListPendaftar() {
         className="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-8 gap-3 mt-5"
         aria-label=""
       >
-        <div className="col-span-2 bg-blue-100 text-gray-700 rounded-md p-7">
+        <div className="col-span-2 bg-blue-100 dark:bg-blue-300 text-gray-700 rounded-md p-7">
           <h2 className="font-semibold tracking-wide">Siswa Terdaftar</h2>
           <p className="text-[3rem] font-bold">{listRegister?.length}</p>
         </div>
-        <div className="col-span-2 bg-green-100 text-gray-700 rounded-md p-7">
+        <div className="col-span-2 bg-green-100 dark:bg-green-300 text-gray-700 rounded-md p-7">
           <h2 className="font-semibold tracking-wide">Nilai ujian Tertinggi</h2>
           <p className="text-[3rem] font-bold">90.1</p>
         </div>
-        <div className="col-span-2 bg-pink-100 text-gray-700 rounded-md p-7">
+        <div className="col-span-2 bg-pink-100 dark:bg-yellow-300 text-gray-700 rounded-md p-7">
           <h2 className="font-semibold tracking-wide">
             Asal Sekolah terbanyak
           </h2>
@@ -132,7 +143,7 @@ export default function ListPendaftar() {
             <p className="text-xs font-semibold mt-auto mb-4">SMP 1 Landak</p>
           </div>
         </div>
-        <div className="col-span-2 bg-red-100 text-gray-700 rounded-md p-7">
+        <div className="col-span-2 bg-red-100 dark:bg-red-300 text-gray-700 rounded-md p-7">
           <h2 className="font-semibold tracking-wide">Gender terbanyak</h2>
           <div className="flex gap-1">
             <p className="text-[3rem] font-bold">49</p>
@@ -145,7 +156,7 @@ export default function ListPendaftar() {
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           type="search"
-          className="font-light text-md lg:text-lg border-none bg-gray-100 rounded-md p-3"
+          className="font-light text-md lg:text-lg border-none bg-gray-100 rounded-md p-2 w-full md:w-5/12 lg:w-2/12"
           placeholder="cari pendaftar"
         />
       </div>
@@ -163,36 +174,61 @@ export default function ListPendaftar() {
           {registersMemoize?.map((register, i) => (
             <div
               key={i}
-              className="grid grid-cols-6 gap-1"
-              aria-label="table-head"
+              className="grid items-center grid-cols-6 gap-1 border-b border-gray-200 dark:border-dark2 h-max"
+              aria-label="table-body"
             >
-              <div className="rounded-md p-2 text-sm lg:text-lg font-light text-center">
+              <div className=" dark:text-gray-100 rounded-md p-2 text-sm lg:text-lg font-semibold text-center">
                 {register.fullname}
               </div>
-              <div className="rounded-md p-2 text-sm lg:text-lg font-light text-center col-span-2">
+              <div className="dark:text-gray-100 rounded-md p-2 text-sm lg:text-lg font-light text-center col-span-2">
                 {register.dob}
               </div>
-              <div className="rounded-md p-2 text-sm lg:text-lg font-light text-center">
+              <div className="dark:text-gray-100 rounded-md p-2 text-sm lg:text-lg font-light text-center">
                 {register.origin_school}
               </div>
-              <div className="rounded-md p-2 text-sm lg:text-lg font-light text-center">
+              <div className="dark:text-gray-100 rounded-md p-2 text-sm lg:text-lg font-light text-center">
                 {register.address}
               </div>
-              <div className="rounded-md p-2 text-sm lg:text-lg font-light text-center flex gap-8 justify-center">
-                <button
-                  onClick={handleEdit(register.id)}
-                  className="text-2xl lg:text-3xl"
-                >
-                  <AiFillEdit />
-                </button>
-                <button
-                  onClick={() =>
-                    handleModalDelete(register.id, register.fullname, "show")
-                  }
-                  className="text-2xl lg:text-3xl"
-                >
-                  <AiFillDelete />
-                </button>
+              <div className="dark:text-gray-100 rounded-md p-2 text-sm lg:text-lg font-light text-center flex gap-5 justify-center">
+                {/* edit permission */}
+                {/* all teacher can edit and delete */}
+                {/* user creator can edit */}
+                {credential.role === "teacher" ? (
+                  <button
+                    onClick={handleEdit(register.id)}
+                    className="text-xl lg:text-2xl"
+                  >
+                    <LuEdit2 />
+                  </button>
+                ) : null}
+
+                {credential.role === "student" &&
+                credential.username === register.creator_id ? (
+                  <button
+                    onClick={handleEdit(register.id)}
+                    className="text-xl lg:text-2xl"
+                  >
+                    <LuEdit2 />
+                  </button>
+                ) : null}
+
+                {/* all teacher can edit and delete */}
+                {credential.role === "teacher" ? (
+                  <button
+                    onClick={() =>
+                      handleModalDelete(register.id, register.fullname, "show")
+                    }
+                    className="text-2xl lg:text-3xl"
+                  >
+                    <CgTrashEmpty />
+                  </button>
+                ) : null}
+
+                {credential.role === "superadmin" ? (
+                  <div className="text-xs lg:text-sm bg-gray-100 h-max p-1 rounded-md tracking-wide">
+                    You don't have permission here
+                  </div>
+                ) : null}
               </div>
             </div>
           ))}
@@ -204,7 +240,7 @@ export default function ListPendaftar() {
         {registersMemoize.map((register, i) => (
           <div
             key={i}
-            className="bg-gray-100 p-5 w-full flex flex-col gap-3"
+            className="dark:bg-gray-100 rounded-lg shadow-md p-5 w-full flex flex-col gap-3"
             aria-label="card"
           >
             <div className="">
@@ -225,24 +261,56 @@ export default function ListPendaftar() {
               <div className="text-xs">Alamat</div>
               <h1 className="text-lg font-semibold">{register.address}</h1>
             </div>
-            <div className="flex gap-4 dis" aria-label="action">
-              <button
-                onClick={handleEdit(register.id)}
-                className="text-2xl lg:text-3xl bg-gray-500 rounded-md p-2 text-white"
-              >
-                <AiFillEdit />
-              </button>
-              <button
-                onClick={() =>
-                  handleModalDelete(register.id, register.fullname, "show")
-                }
-                className="text-2xl lg:text-3xl bg-gray-500 rounded-md p-2 text-white"
-              >
-                <AiFillDelete />
-              </button>
+            <div className="flex gap-3 justify-end" aria-label="action">
+              {/* edit permission */}
+              {/* all teacher can edit and delete */}
+              {/* user creator can edit */}
+              {credential.role === "teacher" ? (
+                <button
+                  onClick={handleEdit(register.id)}
+                  className="text-xl lg:text-2xl bg-gray-400 rounded-md p-2 text-white"
+                >
+                  <LuEdit2 />
+                </button>
+              ) : null}
+
+              {credential.role === "student" &&
+              credential.username === register.creator_id ? (
+                <button
+                  onClick={handleEdit(register.id)}
+                  className="text-xl lg:text-2xl bg-gray-400 rounded-md p-2 text-white"
+                >
+                  <LuEdit2 />
+                </button>
+              ) : null}
+
+              {/* all teacher can edit and delete */}
+              {credential.role === "teacher" ? (
+                <button
+                  onClick={() =>
+                    handleModalDelete(register.id, register.fullname, "show")
+                  }
+                  className="text-2xl lg:text-3xl bg-gray-400 rounded-md p-2 text-white"
+                >
+                  <CgTrashEmpty />
+                </button>
+              ) : null}
             </div>
           </div>
         ))}
+      </div>
+
+      <div
+        className="mb-10 mt-7 flex items-center gap-3  justify-end"
+        aria-label="pagination"
+      >
+        <button className="p-2 bg-gray-200 dark:bg-dark2 text-black/60 dark:text-white  active:bg-gray-300 rounded-md text-xl">
+          <AiOutlineDoubleLeft />
+        </button>
+        <p className="dark:text-white">1 of 2</p>
+        <button className="p-2 bg-gray-200 dark:bg-dark2 text-black/60 dark:text-white  active:bg-gray-300 rounded-md text-xl">
+          <AiOutlineDoubleRight />
+        </button>
       </div>
 
       {isDelete.openModal ? (

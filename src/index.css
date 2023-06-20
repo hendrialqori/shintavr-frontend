@@ -2,6 +2,20 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --dark-mode: #18191a;
+  --light-mode: #fafafa;
+}
+
+body,
+html[data-mode=""] {
+  background-color: var(--light-mode);
+}
+
+html[data-mode="dark"] {
+  background-color: var(--dark-mode);
+}
+
 .checkbox-wrapper .round {
   position: relative;
 }
@@ -61,7 +75,7 @@
   animation-timing-function: cubic-bezier(0, 1, 1, 0);
 }
 
- .lds-ellipsis div:nth-child(1) {
+.lds-ellipsis div:nth-child(1) {
   left: 8px;
   animation: lds-ellipsis1 0.6s infinite;
 }
@@ -105,4 +119,9 @@
 [aria-label="banner"],
 .index-href {
   background: linear-gradient(to left, #9795ef, #f9c5d1);
+}
+
+[aria-label="form-container"] {
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px,
+    rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
 }
