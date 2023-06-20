@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { AiFillDelete, AiFillEdit } from "react-icons/ai";
 import { MdAnnouncement } from "react-icons/md";
 import { AnnouncementDelete } from "./announcementDelete";
 import { AnnouncementUpdate } from "./announcementEdit";
