@@ -52,10 +52,10 @@ export const AnnouncementUpdate = ({
               cols={30}
               rows={10}
               {...register("message")}
-              className="border-none w-full rounded-md"
+              className="text-base md:text-lg border-none w-full focus:ring-2 fouc rounded-md"
               required
             />
-            <div className="grid grid-cols-2 gap-2 mt-4">
+            <div className="flex w-6/12 mx-auto gap-2 mt-4">
               <button
                 className="bg-gray-300 w-full py-2 rounded-md"
                 onClick={closeModal}

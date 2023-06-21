@@ -31,11 +31,11 @@ export const FeedbackDelete = ({
     <>
       <ModalWrapper>
         <ModalChildrenWrapper>
-          <h1 className="text-md text-center">
-            Anda yakin ingin feedback dari{" "}
+          <h1 className="text-md md:text-lg text-center py-4">
+            Anda yakin ingin feedback dari {" "}
             <span className="font-semibold">{person}</span> ?
           </h1>
-          <div className="grid grid-cols-2 gap-2 mt-4">
+          <div className="flex gap-2 mt-4 w-6/12 mx-auto pb-3">
             <button
               className="bg-gray-300 w-full py-2 rounded-md"
               onClick={closeModal}

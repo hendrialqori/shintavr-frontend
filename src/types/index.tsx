@@ -20,6 +20,7 @@ export type Register = {
   gender: string;
   address: string;
   quotes: string
+  score_test: string;
   creator_id: string
   create_at?: string
 }

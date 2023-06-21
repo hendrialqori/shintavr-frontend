@@ -7,7 +7,11 @@ import { db_firestore } from "@/configs/firebase";
 import { useNavigate } from "react-router-dom";
 import { userCredential } from "@/store";
 import { useRecoilValue } from "recoil";
-import { v4 as uuidv4 } from 'uuid';
+import { v4 as uuidv4 } from "uuid";
+import { AiOutlineUser, AiOutlineFileText } from "react-icons/ai";
+import { BsCalendarDate, BsGenderAmbiguous } from "react-icons/bs";
+import { TbSchool } from "react-icons/tb";
+import { FaRegAddressCard } from "react-icons/fa";
 
 type Form = {
   fullname: string;
@@ -15,14 +19,14 @@ type Form = {
   origin_school: string;
   address: string;
   gender: "male" | "female";
+  score_test: number;
   quotes: string;
 };
 
 export default function FormPendaftaran() {
+  const UUID = (uuidv4() as any).replaceAll("-", "").slice(0, 15);
 
-  const UUID = (uuidv4() as any).replaceAll('-', '').slice(0, 15)
-
-  const credential = useRecoilValue(userCredential)
+  const credential = useRecoilValue(userCredential);
 
   const { register, handleSubmit: submit, setValue } = useForm<Form>();
 
@@ -45,14 +49,22 @@ export default function FormPendaftaran() {
           const docSnap = await getDoc(docRef);
 
           if (docSnap.exists()) {
-            const { fullname, dob, origin_school, address, gender, quotes } =
-              docSnap.data() as Form;
+            const {
+              fullname,
+              dob,
+              origin_school,
+              address,
+              gender,
+              quotes,
+              score_test,
+            } = docSnap.data() as Form;
             setValue("fullname", fullname);
             setValue("dob", dob);
             setValue("origin_school", origin_school);
             setValue("address", address);
             setValue("gender", gender);
             setValue("quotes", quotes);
+            setValue("score_test", score_test);
 
             setLoading(false);
           } else {
@@ -81,23 +93,16 @@ export default function FormPendaftaran() {
           quotes: data.quotes,
         });
       } else {
-        await setDoc(
-          doc(
-            db_firestore,
-            "registers-list",
-            UUID
-          ),
-          {
-            id: UUID,
-            fullname: data.fullname,
-            dob: data.dob,
-            gender: data.gender,
-            origin_school: data.origin_school,
-            address: data.address,
-            quotes: data.quotes,
-            creator_id: credential.username
-          }
-        );
+        await setDoc(doc(db_firestore, "registers-list", UUID), {
+          id: UUID,
+          fullname: data.fullname,
+          dob: data.dob,
+          gender: data.gender,
+          origin_school: data.origin_school,
+          address: data.address,
+          quotes: data.quotes,
+          creator_id: credential.username,
+        });
       }
 
       setLoading(false);
@@ -111,86 +116,138 @@ export default function FormPendaftaran() {
   return (
     <>
       {isLoading ? <Loading /> : null}
-      <h2 className="text-lg font-semibold">Form Pendaftaran</h2>
+      <div className="text-center py-5">
+        <h2 className="text-lg lg:text-2xl font-semibold tracking-wide">
+          FORM PENDAFTARAN
+        </h2>
+        <span className="text-sm font-light">
+          Siswa/siswi hanya dapat membuat 1 data pendaftaran
+        </span>
+      </div>
+
+      <div className="rounded-md p-1 lg:p-2 font-normal lg:font-semibold tracking-wide bg-blue-100 text-blue-600 w-max mx-auto text-sm">
+        {isEdit && isEdit ? 'Update mode' : 'Create mode'}
+      </div>
+
       <form
         onSubmit={handleSubmit}
         className="w-full mt-5 flex flex-col gap-6 lg:gap-4"
       >
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
-          <div className="col-span-2 flex flex-col gap-2">
-            <label htmlFor="nama-lengkap">Nama lengkap</label>
+          <div className="col-span-2 flex h-10 lg:h-14">
+            <label
+              htmlFor="fullname"
+              className="flex flex-col items-center justify-center bg-blue-400 rounded-l-md w-1/12"
+            >
+              <AiOutlineUser className="text-white text-sm lg:text-2xl" />
+            </label>
             <input
-              className="border-none p-5 bg-gray-100 rounded-lg"
+              id="fullname"
               type="text"
+              className="font-light text-base lg:text-lg w-full rounded-r-md border-none shadow-sm focus:ring-0 bg-gray-100 focus:border-none"
+              placeholder="Nama Lengkap"
+              required
               {...register("fullname")}
-              required
             />
           </div>
-          <div className="col-span-2 flex flex-col gap-2">
-            <label htmlFor="nama-lengkap">Tempat, tanggal lahir</label>
+          <div className="col-span-2 flex h-10 lg:h-14">
+            <label
+              htmlFor="dob"
+              className="flex flex-col items-center justify-center bg-blue-400 rounded-l-md w-1/12"
+            >
+              <BsCalendarDate className="text-white text-sm lg:text-2xl" />
+            </label>
             <input
-              className="border-none p-5 bg-gray-100 rounded-lg"
+              id="dob"
               type="text"
-              placeholder="cth : Jakarta, 12 Mei 1990"
+              className="font-light text-base lg:text-lg w-full rounded-r-md border-none shadow-sm focus:ring-0 bg-gray-100 focus:border-none"
+              placeholder="Tempat, tanggal lahir | cth: Jakarta, 12 Mei 2000"
+              required
               {...register("dob")}
-              required
             />
           </div>
         </div>
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-          <div className="col-span-2 flex flex-col gap-2">
-            <label htmlFor="nama-lengkap">Asal Sekolah</label>
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="col-span-2 flex h-10 lg:h-14">
+            <label
+              htmlFor="origin_school"
+              className="flex flex-col items-center justify-center bg-blue-400 rounded-l-md w-1/12"
+            >
+              <TbSchool className="text-white text-sm lg:text-2xl" />
+            </label>
             <input
-              className="border-none p-5 bg-gray-100 rounded-lg"
+              id="origin_school"
               type="text"
+              className="font-light text-base lg:text-lg w-full rounded-r-md border-none shadow-sm focus:ring-0 bg-gray-100 focus:border-none"
+              placeholder="Sekolah asal"
+              required
               {...register("origin_school")}
-              required
             />
           </div>
-          <div className="col-span-2 flex flex-col gap-2">
-            <label htmlFor="nama-lengkap">Alamat</label>
+          <div className="col-span-2 flex h-10 lg:h-14">
+            <label
+              htmlFor="address"
+              className="flex flex-col items-center justify-center bg-blue-400 rounded-l-md w-1/12"
+            >
+              <FaRegAddressCard className="text-white text-sm lg:text-2xl" />
+            </label>
             <input
-              className="border-none p-5 bg-gray-100 rounded-lg"
+              id="address"
               type="text"
-              {...register("address")}
+              className="font-light text-base lg:text-lg w-full rounded-r-md border-none shadow-sm focus:ring-0 bg-gray-100 focus:border-none"
+              placeholder="Alamat"
               required
+              {...register("address")}
             />
           </div>
         </div>
-        <div className="col-span-2 my-2">
-          <div>Gender</div>
-          <div className="flex items-center gap-4 mt-1">
-            <div className="flex gap-2 items-center">
-              <label htmlFor="male">Laki-laki</label>
-              <input
-                id="male"
-                type="radio"
-                value="male"
-                {...register("gender")}
-              />
-            </div>
-            <div className="flex gap-2 items-center">
-              <label htmlFor="female">Perempuan</label>
-              <input
-                id="female"
-                type="radio"
-                value="female"
-                {...register("gender")}
-              />
-            </div>
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="col-span-2 flex h-10 lg:h-14">
+            <label
+              htmlFor="gender"
+              className="flex flex-col items-center justify-center bg-blue-400 rounded-l-md w-1/12"
+            >
+              <BsGenderAmbiguous className="text-white text-sm lg:text-2xl" />
+            </label>
+            <select
+              id="gender"
+              className="font-light text-base lg:text-lg w-full rounded-r-md border-none shadow-sm focus:ring-0 bg-gray-100 focus:border-none"
+              {...register("gender")}
+            >
+              <option value="male">Laki laki</option>
+              <option value="female">Perempuan</option>
+            </select>
+          </div>
+          <div className="col-span-2 flex h-10 lg:h-14">
+            <label
+              htmlFor="score"
+              className="flex flex-col items-center justify-center bg-blue-400 rounded-l-md w-1/12"
+            >
+              <AiOutlineFileText className="text-white text-sm lg:text-2xl" />
+            </label>
+            <input
+              id="score"
+              type="number"
+              className="font-light text-base lg:text-lg w-full rounded-r-md border-none shadow-sm focus:ring-0 bg-gray-100 focus:border-none"
+              placeholder="Nilai ujian"
+              required
+              {...register("score_test")}
+            />
           </div>
         </div>
+
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
           <div className="col-span-4 flex flex-col gap-2">
-            <label htmlFor="nama-lengkap">Quotes</label>
             <textarea
-              className="border-none p-5 bg-gray-100 rounded-lg"
+              className="font-light text-base lg:text-lg w-full rounded-r-md border-none shadow-sm focus:ring-0 bg-gray-100 focus:border-none"
               {...register("quotes")}
+              rows={6}
+              placeholder="Quotes"
             />
           </div>
         </div>
         <button
-          className="bg-blue-400 hover:bg-blue-300 py-4 rounded-lg text-white"
+          className="bg-blue-400 hover:bg-blue-300 py-2 lg:py-4 rounded-lg text-white w-max px-2 lg:px-3"
           type="submit"
         >
           Simpan

@@ -50,14 +50,14 @@ export const UserEdit = ({
     <>
       <ModalWrapper>
         <ModalChildrenWrapper>
-          <h1 className="flex items-center justify-center gap-1 text-md font-semibold text-center">
+          <h1 className="flex items-center justify-center gap-1 text-md md:text-lg font-semibold text-center">
             {name} <span className="text-xs font-normal">permission ?</span>
           </h1>
           <div className="flex justify-center items-center gap-3 my-5">
             <div className="flex flex-col items-center gap-2">
               <label
                 htmlFor="student"
-                className={`text-sm bg-gray-100 rounded-md py-1 px-3`}
+                className={`text-sm md:text-base bg-gray-100 rounded-md py-1 px-3`}
               >
                 Student
               </label>
@@ -71,7 +71,7 @@ export const UserEdit = ({
             <div className="flex flex-col items-center gap-2">
               <label
                 htmlFor="teacher"
-                className="text-sm bg-gray-100 rounded-md py-1 px-3"
+                className="text-sm md:text-base bg-gray-100 rounded-md py-1 px-3"
               >
                 Teacher
               </label>

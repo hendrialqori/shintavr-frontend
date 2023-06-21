@@ -97,7 +97,7 @@ export default function Login() {
       {isLoading ? <Loading /> : null}
 
       <div className="h-[100vh] w-full border-2 flex flex-col justify-center items-center">
-        <div className="p-4 w-11/12 md:w-6/12 lg:w-4/12" aria-label="form-container">
+        <div className="p-4 w-full md:w-6/12 lg:w-4/12 rounded-md md:rounded-xl" aria-label="form-container">
           <h1 className="text-lg font-bold mb-8 text-center">
             Selamat datang :)
           </h1>
@@ -142,7 +142,7 @@ export default function Login() {
             </div>
             <button
               disabled={isLoading}
-              className="bg-gray-200 w-max px-4 py-3 rounded-md font-light mt-2 active:bg-gray-300 mr-0 ml-auto"
+              className="bg-gray-200 w-max px-4 py-3 rounded-md mt-2 active:bg-gray-300 mr-0 ml-auto"
               type="submit"
             >
               Login

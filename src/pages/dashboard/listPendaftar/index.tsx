@@ -1,8 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import {
-  AiOutlineDoubleLeft,
-  AiOutlineDoubleRight,
-} from "react-icons/ai";
+import { AiOutlineDoubleLeft, AiOutlineDoubleRight } from "react-icons/ai";
 import { BerkasDelete } from "./berkasDelete";
 import { useNavigate } from "react-router-dom";
 import { Loading } from "@/components/loading";
@@ -13,6 +10,7 @@ import { useRecoilValue } from "recoil";
 import { userCredential } from "@/store";
 import { CgTrashEmpty } from "react-icons/cg";
 import { LuEdit2 } from "react-icons/lu";
+import { BiSearch } from "react-icons/bi";
 
 export default function ListPendaftar() {
   const thead = useMemo(() => {
@@ -20,27 +18,27 @@ export default function ListPendaftar() {
       {
         title: "Name Lengkap",
         className:
-          "bg-gray-300 dark:bg-dark2 dark:text-white rounded-md p-2 text-sm lg:text-lg font-light text-center",
+          "bg-white text-gray-400 font-semibold dark:bg-dark2 dark:text-white rounded-md p-2 text-sm lg:text-base font-light text-center",
       },
       {
         title: "Tempat, tanggal lahir",
         className:
-          "bg-gray-300 dark:bg-dark2 dark:text-white rounded-md p-2 text-sm lg:text-lg font-light text-center col-span-2",
+          "bg-white text-gray-400 font-semibold dark:bg-dark2 dark:text-white rounded-md p-2 text-sm lg:text-base font-light text-center col-span-2",
       },
       {
         title: "Asal Sekolah",
         className:
-          "bg-gray-300 dark:bg-dark2 dark:text-white rounded-md p-2 text-sm lg:text-lg font-light text-center",
+          "bg-white text-gray-400 font-semibold dark:bg-dark2 dark:text-white rounded-md p-2 text-sm lg:text-base font-light text-center",
       },
       {
         title: "Alamat",
         className:
-          "bg-gray-300 dark:bg-dark2 dark:text-white rounded-md p-2 text-sm lg:text-lg font-light text-center",
+          "bg-white text-gray-400 font-semibold dark:bg-dark2 dark:text-white rounded-md p-2 text-sm lg:text-base font-light text-center",
       },
       {
         title: "Action",
         className:
-          "bg-gray-300 dark:bg-dark2 dark:text-white rounded-md p-2 text-sm lg:text-lg font-light text-center",
+          "bg-white text-gray-400 font-semibold dark:bg-dark2 dark:text-white rounded-md p-2 text-sm lg:text-base font-light text-center",
       },
     ];
   }, []);
@@ -121,7 +119,16 @@ export default function ListPendaftar() {
     <>
       {loadingBeforeEdit ? <Loading /> : null}
       {isLoading ? <Loading /> : null}
-      <h2 className="text-lg font-semibold">List Pendaftar</h2>
+      <div className="text-center py-5">
+        <h2 className="text-lg lg:text-2xl font-semibold tracking-wide">
+          LIST PENDAFTAR
+        </h2>
+        <span className="text-sm font-light">
+          Berisi list siswa/siswi yang mendaftar sendiri atau di daftarkan oleh
+          guru
+        </span>
+      </div>
+
       <div
         className="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-8 gap-3 mt-5"
         aria-label=""
@@ -130,9 +137,14 @@ export default function ListPendaftar() {
           <h2 className="font-semibold tracking-wide">Siswa Terdaftar</h2>
           <p className="text-[3rem] font-bold">{listRegister?.length}</p>
         </div>
-        <div className="col-span-2 bg-green-100 dark:bg-green-300 text-gray-700 rounded-md p-7">
-          <h2 className="font-semibold tracking-wide">Nilai ujian Tertinggi</h2>
-          <p className="text-[3rem] font-bold">90.1</p>
+        <div className="col-span-2 bg-green-100 dark:bg-yellow-300 text-gray-700 rounded-md p-7">
+          <h2 className="font-semibold tracking-wide">
+            Nilai ujian tertinggi
+          </h2>
+          <div className="flex gap-1">
+            <p className="text-[3rem] font-bold">91</p>
+            <p className="text-xs font-semibold mt-auto mb-4">Hendri Alqori</p>
+          </div>
         </div>
         <div className="col-span-2 bg-pink-100 dark:bg-yellow-300 text-gray-700 rounded-md p-7">
           <h2 className="font-semibold tracking-wide">
@@ -151,18 +163,37 @@ export default function ListPendaftar() {
           </div>
         </div>
       </div>
-      <div className="mt-8">
-        <input
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          type="search"
-          className="font-light text-md lg:text-lg border-none bg-gray-100 rounded-md p-2 w-full md:w-5/12 lg:w-2/12"
-          placeholder="cari pendaftar"
-        />
-      </div>
 
       {/* tab and laptop version */}
-      <div className="mt-4 hidden md:block" role="table">
+      <div
+        className="my-4 hidden md:block bg-white rounded-lg shadow-md py-5"
+        role="table"
+      >
+        {/* Input search */}
+        <div className="mx-4 mb-5 flex items-center">
+          <div className="bg-gray-200 text-gray-800 py-3 px-5 rounded-l-lg">
+            <BiSearch className="text-2xl" />
+          </div>
+          <input
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            type="search"
+            className={`text-md border-none bg-gray-100 focus:ring-2 focus:ring-blue-600 focus:bg-white p-3 w-full placeholder:text-center ${
+              credential.role !== "teacher" ? "rounded-r-lg" : null
+            }`}
+            placeholder="Cari nama pendaftar"
+          />
+          {credential.role === "teacher" ? (
+            <button
+              onClick={() => navigate("/formulir")}
+              className="bg-blue-400 py-3 px-5 rounded-r-lg text-white font-semibold"
+            >
+              Tambah
+            </button>
+          ) : null}
+        </div>
+
+        {/* Table Head */}
         <div className="grid grid-cols-6 gap-1" aria-label="table-head">
           {thead.map((row, i) => (
             <div key={i} className={row.className}>
@@ -170,26 +201,28 @@ export default function ListPendaftar() {
             </div>
           ))}
         </div>
+
+        {/* Table Body */}
         <div className="flex flex-col gap-1 mt-3" aria-label="table-data">
           {registersMemoize?.map((register, i) => (
             <div
               key={i}
-              className="grid items-center grid-cols-6 gap-1 border-b border-gray-200 dark:border-dark2 h-max"
+              className="grid items-center grid-cols-6 gap-1 border-b border-gray-100 dark:border-dark2 h-max"
               aria-label="table-body"
             >
-              <div className=" dark:text-gray-100 rounded-md p-2 text-sm lg:text-lg font-semibold text-center">
+              <div className="dark:text-gray-100 rounded-md p-2 text-sm lg:text-base text-center">
                 {register.fullname}
               </div>
-              <div className="dark:text-gray-100 rounded-md p-2 text-sm lg:text-lg font-light text-center col-span-2">
+              <div className="dark:text-gray-100 rounded-md p-2 text-sm lg:text-base font-light text-center col-span-2">
                 {register.dob}
               </div>
-              <div className="dark:text-gray-100 rounded-md p-2 text-sm lg:text-lg font-light text-center">
+              <div className="dark:text-gray-100 rounded-md p-2 text-sm lg:text-base font-light text-center">
                 {register.origin_school}
               </div>
-              <div className="dark:text-gray-100 rounded-md p-2 text-sm lg:text-lg font-light text-center">
+              <div className="dark:text-gray-100 rounded-md p-2 text-sm lg:text-base font-light text-center">
                 {register.address}
               </div>
-              <div className="dark:text-gray-100 rounded-md p-2 text-sm lg:text-lg font-light text-center flex gap-5 justify-center">
+              <div className="dark:text-gray-100 rounded-md p-2 text-sm lg:text-base font-light text-center flex gap-5 justify-center">
                 {/* edit permission */}
                 {/* all teacher can edit and delete */}
                 {/* user creator can edit */}
@@ -202,8 +235,9 @@ export default function ListPendaftar() {
                   </button>
                 ) : null}
 
-                {credential.role === "student" &&
-                credential.username === register.creator_id ? (
+                {(credential.role === "student" &&
+                  credential.username === register.creator_id) ||
+                credential.email === register.creator_id ? (
                   <button
                     onClick={handleEdit(register.id)}
                     className="text-xl lg:text-2xl"
@@ -233,10 +267,53 @@ export default function ListPendaftar() {
             </div>
           ))}
         </div>
+
+        {/* Pagination */}
+        <div
+          className="flex items-center gap-3 justify-end mt-10 mr-4"
+          aria-label="pagination"
+        >
+          {/* show per row */}
+          <div className="flex items-center gap-3 text-sm">
+            <p> Rows per page</p>
+            <select className="border-gray-100 outline-none bg-gray-100 rounded-lg">
+              <option value="5">5</option>
+              <option value="10">10</option>
+              <option value="20">10</option>
+            </select>
+          </div>
+
+          {/* button move page */}
+          <div className="flex items-center gap-3">
+            <button className="p-2 dark:bg-dark2 text-black dark:text-white  active:bg-gray-300 rounded-md text-lg">
+              <AiOutlineDoubleLeft />
+            </button>
+            <p className="dark:text-white text-sm">1 of 2 page</p>
+            <button className="p-2 dark:bg-dark2 text-black dark:text-white  active:bg-gray-300 rounded-md text-lg">
+              <AiOutlineDoubleRight />
+            </button>
+          </div>
+        </div>
       </div>
 
       {/* phone version */}
       <div className="flex flex-col gap-4 md:hidden mt-4">
+        <div className="mt-8 flex items-center">
+          <div className="bg-gray-200 text-gray-800 p-3 rounded-l-lg">
+            <BiSearch className="text-2xl" />
+          </div>
+          <input
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            type="search"
+            className={`text-md border-none bg-gray-100 focus:ring-2 focus:ring-blue-600 focus:bg-white p-3 w-full placeholder:text-center ${
+              credential.role !== "teacher" ? "rounded-r-lg" : null
+            }`}
+            placeholder="Cari nama pendaftar"
+          />
+        </div>
+
+        {/* card list registration */}
         {registersMemoize.map((register, i) => (
           <div
             key={i}
@@ -298,9 +375,36 @@ export default function ListPendaftar() {
             </div>
           </div>
         ))}
+
+        {/* pagination */}
+        <div
+          className="flex flex-col-reverse items-center gap-3 justify-center"
+          aria-label="pagination"
+        >
+          {/* show per row */}
+          <div className="flex items-center gap-3 text-sm">
+            <p> Rows per page</p>
+            <select className="border-gray-100 outline-none bg-gray-100 rounded-lg">
+              <option value="5">5</option>
+              <option value="10">10</option>
+              <option value="20">10</option>
+            </select>
+          </div>
+
+          {/* button move page */}
+          <div className="flex items-center gap-3">
+            <button className="p-2 dark:bg-dark2 text-black dark:text-white  active:bg-gray-300 rounded-md text-lg">
+              <AiOutlineDoubleLeft />
+            </button>
+            <p className="dark:text-white text-sm">1 of 2 page</p>
+            <button className="p-2 dark:bg-dark2 text-black dark:text-white  active:bg-gray-300 rounded-md text-lg">
+              <AiOutlineDoubleRight />
+            </button>
+          </div>
+        </div>
       </div>
 
-      <div
+      {/* <div
         className="mb-10 mt-7 flex items-center gap-3  justify-end"
         aria-label="pagination"
       >
@@ -311,7 +415,7 @@ export default function ListPendaftar() {
         <button className="p-2 bg-gray-200 dark:bg-dark2 text-black/60 dark:text-white  active:bg-gray-300 rounded-md text-xl">
           <AiOutlineDoubleRight />
         </button>
-      </div>
+      </div> */}
 
       {isDelete.openModal ? (
         <BerkasDelete

@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { Gallery } from "./gallery";
 import { Announcement } from "./announcement";
-import { ButtonTab } from "@/components/buttonTab";
 import { useSearchParams, useNavigate } from "react-router-dom";
 
 type Tabs = "GALLERY" | "ANNOUNCEMENT";
@@ -30,22 +29,30 @@ export default function Onboarding() {
 
   return (
     <>
-      <h2 className="text-2xl font-semibold dark:text-gray-200">
-        Selamat Datang di website pendaftaran siswa baru !
-      </h2>
-      <div className="my-5 w-max flex gap-2" aria-label="tabs">
-        <ButtonTab
-          isActive={tab === "GALLERY"}
-          onClick={handleMoveTab("GALLERY")}
-        >
-          Galeri
-        </ButtonTab>
-        <ButtonTab
-          isActive={tab === "ANNOUNCEMENT"}
-          onClick={handleMoveTab("ANNOUNCEMENT")}
-        >
-          Pengumuman
-        </ButtonTab>
+      <div className="text-center mt-5 mb-8">
+        <h2 className="text-lg lg:text-2xl font-semibold tracking-wide">
+          SELAMAT DATANG DI WEBSITE PENDAFTARAN SISWA/SIWI BARU
+        </h2>
+        <div className="my-5 w-max flex gap-2 mx-auto" aria-label="tabs">
+          <button
+            onClick={handleMoveTab("GALLERY")}
+            className={`rounded-md text-sm md:text-base p-1 md:p-2 font-light md:font-semibold tracking-wide ${
+              tab === "GALLERY" ? "bg-blue-100 text-blue-600" : "text-gray-500"
+            }`}
+          >
+            Galeri Sekolah
+          </button>
+          <button
+            onClick={handleMoveTab("ANNOUNCEMENT")}
+            className={`rounded-md text-sm md:text-base  p-1 md:p-2 font-light md:font-semibold tracking-wide ${
+              tab === "ANNOUNCEMENT"
+                ? "bg-blue-100 text-blue-600"
+                : "text-gray-500"
+            }`}
+          >
+            Pengumuman
+          </button>
+        </div>
       </div>
       {tab === "GALLERY" && <Gallery />}
       {tab === "ANNOUNCEMENT" && <Announcement />}

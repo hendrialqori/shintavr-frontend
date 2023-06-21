@@ -8,7 +8,8 @@ export default {
     extend: {
       colors: {
         dark: '#18191a',
-        dark2: '#252329'
+        dark2: '#252329',
+        navy: '#01021e'
       }
     },
   },

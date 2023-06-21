@@ -13,11 +13,11 @@ import { userCredential } from "@/store";
 import { collection, onSnapshot } from "firebase/firestore";
 import { db_firestore } from "@/configs/firebase";
 import { Register } from "@/types";
-import { FiMoon } from "react-icons/fi";
-import { useMode } from "@/hooks/useMode";
+// import { FiMoon } from "react-icons/fi";
+// import { useMode } from "@/hooks/useMode";
 
 export const Sidebar = () => {
-  const { toogleMode } = useMode();
+  // const { toogleMode } = useMode();
 
   const credential = useRecoilValue(userCredential);
 
@@ -59,7 +59,7 @@ export const Sidebar = () => {
 
   useEffect(() => {
     const isHaveRegisterData = temporaryRegisterData.find(
-      (d) => d.creator_id === credential.username
+      (d) => d.creator_id === credential.username || d.creator_id === credential.email
     );
 
     if (isHaveRegisterData) {
@@ -84,7 +84,7 @@ export const Sidebar = () => {
 
   return (
     <>
-      <aside className="w-14 lg:w-20 h-screen flex flex-col justify-between p-4 dark:bg-black bg-gray-100 z-10">
+      <aside className="w-11 md:w-20 h-screen flex flex-col justify-between p-4 dark:bg-black bg-navy z-10">
         <nav className="flex flex-col items-center">
           <Href to="/onboarding" name="onboarding">
             <FaSchool size={20} />
@@ -117,15 +117,15 @@ export const Sidebar = () => {
           ) : null}
         </nav>
         <div className="flex flex-col items-center">
-          <button
+          {/* <button
             onClick={toogleMode}
             className="bg-gray-200 hover:bg-gray-300 rounded-lg p-3 inline-block my-4"
           >
             <FiMoon size={20} />
-          </button>
+          </button> */}
           <button
             onClick={() => setModalLogout(true)}
-            className="bg-gray-200 hover:bg-gray-300 rounded-lg p-3 inline-block my-4"
+            className="bg-gray-200 hover:bg-gray-300 rounded-lg p-2 md:p-3 inline-block my-4"
           >
             <AiOutlineLogout size={20} />
           </button>

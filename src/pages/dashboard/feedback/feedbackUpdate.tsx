@@ -51,10 +51,10 @@ export const FeedbackUpdate = ({
               cols={30}
               rows={10}
               {...register("message")}
-              className="border-none w-full rounded-md"
+              className="border-none w-full rounded-md focus:ring-2"
               required
             />
-            <div className="grid grid-cols-2 gap-2 mt-4">
+            <div className="flex gap-2 mt-4 w-6/12 mx-auto pb-3">
               <button
                 className="bg-gray-300 w-full py-2 rounded-md"
                 onClick={closeModal}
