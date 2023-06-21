@@ -99,7 +99,7 @@ export default function Login() {
       <div className="h-[100vh] w-full border-2 flex flex-col justify-center items-center">
         <div className="p-4 w-full md:w-6/12 lg:w-4/12 rounded-md md:rounded-xl" aria-label="form-container">
           <h1 className="text-lg font-bold mb-8 text-center">
-            Selamat datang :)
+            Selamat datang edit :)
           </h1>
           <form onSubmit={handleSubmit} className="flex flex-col gap-4">
             <div className="grid grid-cols-9 h-12">
