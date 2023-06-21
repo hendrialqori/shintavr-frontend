@@ -1,5 +1,5 @@
-import { AiFillEdit } from "react-icons/ai";
-import { BsPersonCircle } from "react-icons/bs";
+// import { AiFillEdit } from "react-icons/ai";
+// import { BsPersonCircle } from "react-icons/bs";
 import { collection, addDoc, updateDoc, doc } from "firebase/firestore";
 import { db_firestore } from "@/configs/firebase";
 import { useState } from "react";

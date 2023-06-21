@@ -58,6 +58,7 @@ export default function FormPendaftaran() {
               quotes,
               score_test,
             } = docSnap.data() as Form;
+
             setValue("fullname", fullname);
             setValue("dob", dob);
             setValue("origin_school", origin_school);
@@ -90,6 +91,7 @@ export default function FormPendaftaran() {
           gender: data.gender,
           origin_school: data.origin_school,
           address: data.address,
+          score_test: data.score_test,
           quotes: data.quotes,
         });
       } else {
@@ -101,6 +103,7 @@ export default function FormPendaftaran() {
           origin_school: data.origin_school,
           address: data.address,
           quotes: data.quotes,
+          score_test: data.score_test,
           creator_id: credential.username,
         });
       }
