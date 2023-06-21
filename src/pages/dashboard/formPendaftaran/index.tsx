@@ -59,13 +59,15 @@ export default function FormPendaftaran() {
               score_test,
             } = docSnap.data() as Form;
 
+            console.log("snap data", score_test);
+
+            setValue("score_test", score_test);
             setValue("fullname", fullname);
             setValue("dob", dob);
             setValue("origin_school", origin_school);
             setValue("address", address);
             setValue("gender", gender);
             setValue("quotes", quotes);
-            setValue("score_test", score_test);
 
             setLoading(false);
           } else {
@@ -81,6 +83,8 @@ export default function FormPendaftaran() {
   }, []);
 
   const handleSubmit = submit(async (data) => {
+    console.log(data);
+
     setLoading(true);
     try {
       if (!!isEdit) {
@@ -89,9 +93,9 @@ export default function FormPendaftaran() {
           fullname: data.fullname,
           dob: data.dob,
           gender: data.gender,
+          score_test: data.score_test,
           origin_school: data.origin_school,
           address: data.address,
-          score_test: data.score_test,
           quotes: data.quotes,
         });
       } else {
@@ -100,10 +104,10 @@ export default function FormPendaftaran() {
           fullname: data.fullname,
           dob: data.dob,
           gender: data.gender,
+          score_test: data.score_test,
           origin_school: data.origin_school,
           address: data.address,
           quotes: data.quotes,
-          score_test: data.score_test,
           creator_id: credential.username,
         });
       }
@@ -129,7 +133,7 @@ export default function FormPendaftaran() {
       </div>
 
       <div className="rounded-md p-1 lg:p-2 font-normal lg:font-semibold tracking-wide bg-blue-100 text-blue-600 w-max mx-auto text-sm">
-        {isEdit && isEdit ? 'Update mode' : 'Create mode'}
+        {isEdit && isEdit ? "Update mode" : "Create mode"}
       </div>
 
       <form
