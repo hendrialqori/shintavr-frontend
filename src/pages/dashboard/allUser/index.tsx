@@ -82,7 +82,7 @@ export default function AllUser() {
   }, []);
 
   const handleModalEdit = (
-    id: string = "",
+    id = "",
     name: string,
     permission: string,
     type: "show" | "close"
@@ -100,7 +100,7 @@ export default function AllUser() {
   };
 
   const handleModalDelete = (
-    id: string = "",
+    id = "",
     name: string,
     permission: string,
     type: "show" | "close"
@@ -343,11 +343,11 @@ export default function AllUser() {
 
           {/* button move page */}
           <div className="flex items-center gap-3 ">
-            <button className="p-2 dark:bg-dark2 text-black dark:text-white  active:bg-gray-300 rounded-md text-lg">
+            <button className="p-2 dark:bg-dark2 text-black dark:text-white active:bg-gray-300 rounded-md text-lg">
               <AiOutlineDoubleLeft />
             </button>
             <p className="dark:text-white text-sm">1 of 2 page</p>
-            <button className="p-2 dark:bg-dark2 text-black dark:text-white  active:bg-gray-300 rounded-md text-lg">
+            <button className="p-2 dark:bg-dark2 text-black dark:text-white active:bg-gray-300 rounded-md text-lg">
               <AiOutlineDoubleRight />
             </button>
           </div>

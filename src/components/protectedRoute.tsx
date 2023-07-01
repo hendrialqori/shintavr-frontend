@@ -1,19 +1,18 @@
 import { Navigate, Outlet } from "react-router-dom";
 import RootLayout from "./layout";
-import { onAuthStateChanged, getAuth } from "firebase/auth";
-import { app } from "@/configs/firebase";
+import { onAuthStateChanged } from "firebase/auth";
 import { useEffect, useState } from "react";
 import { doc, getDoc } from "firebase/firestore";
-import { db_firestore } from "@/configs/firebase";
+import { db_firestore, auth } from "@/configs/firebase";
 import { useSetRecoilState } from "recoil";
-import { userCredential, loginThrough } from "@/store";
+import { loginThrough } from "@/store";
 import { trackDataProvider } from "@/utils/trackProvider";
 import type { UserCredential } from "@/types";
+import { useCredential } from "@/hooks/useCredential";
 
 export const ProtectedRoute = () => {
-  const auth = getAuth(app);
 
-  const setUserCredential = useSetRecoilState(userCredential);
+  const { setCredential } = useCredential();
 
   const setLoginProvider = useSetRecoilState(loginThrough);
 
@@ -28,12 +27,12 @@ export const ProtectedRoute = () => {
 
       trackDataProvider(async (data) => {
         if (data === "google") {
-          setUserCredential({
+         setCredential({
             id: credential.email!,
             fullname: credential.displayName!,
             password: "********",
             role: "student",
-            username: '-',
+            username: "-",
             authThrough: "google",
             email: credential.email!,
             create_at: credential.metadata.creationTime,
@@ -48,7 +47,7 @@ export const ProtectedRoute = () => {
             const data = userDoc.data();
 
             // set credential
-            setUserCredential({
+           setCredential({
               ...data,
               authThrough: "firebase",
             } as UserCredential);

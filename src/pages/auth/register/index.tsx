@@ -1,7 +1,6 @@
 import { Link } from "react-router-dom";
 import { Loading } from "@/components/loading";
 import {
-  getAuth,
   createUserWithEmailAndPassword,
   onAuthStateChanged,
   signInWithPopup,
@@ -9,24 +8,22 @@ import {
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { setDoc, doc } from "firebase/firestore";
-import { db_firestore, app, googleProvider } from "@/configs/firebase";
+import { db_firestore, auth, googleProvider } from "@/configs/firebase";
 import { AlreadyAuthPage } from "@/components/alreadyAuthPage";
 import { AiOutlineUser, AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
 import { TfiEmail } from "react-icons/tfi";
 import { FiLock } from "react-icons/fi";
 import { MdAlternateEmail } from "react-icons/md";
 import { useSetRecoilState } from "recoil";
-import { userCredential, loginThrough } from "@/store";
-
+import { loginThrough } from "@/store";
+import { useCredential } from "@/hooks/useCredential";
 
 export default function Register() {
-  const setUserCredential = useSetRecoilState(userCredential);
+  const { setCredential } = useCredential();
 
   const setLoginThrough = useSetRecoilState(loginThrough);
 
   const [seePassword, setSeePassword] = useState(false);
-
-  const auth = getAuth(app);
 
   const [isVerify, setVerify] = useState(true);
 
@@ -84,12 +81,12 @@ export default function Register() {
   const handleLoginWithGoogle = async () => {
     try {
       await signInWithPopup(auth, googleProvider).then((result) => {
-        setUserCredential({
+        setCredential({
           id: result.user.email!,
           fullname: result.user.displayName!,
           password: "********",
           role: "student",
-          username: '-',
+          username: "-",
           authThrough: "google",
           email: result.user.email!,
           create_at: result.user.metadata.creationTime,

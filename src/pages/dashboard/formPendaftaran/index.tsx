@@ -5,13 +5,13 @@ import { Loading } from "@/components/loading";
 import { doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
 import { db_firestore } from "@/configs/firebase";
 import { useNavigate } from "react-router-dom";
-import { userCredential } from "@/store";
-import { useRecoilValue } from "recoil";
-import { v4 as uuidv4 } from "uuid";
-import { AiOutlineUser, AiOutlineFileText } from "react-icons/ai";
+import { AiOutlineUser } from "react-icons/ai";
 import { BsCalendarDate, BsGenderAmbiguous } from "react-icons/bs";
 import { TbSchool } from "react-icons/tb";
 import { FaRegAddressCard } from "react-icons/fa";
+import { useCredential } from "@/hooks/useCredential";
+import { UUID } from "@/utils/uuid";
+import { Input } from "@/components/input";
 
 type Form = {
   fullname: string;
@@ -24,9 +24,7 @@ type Form = {
 };
 
 export default function FormPendaftaran() {
-  const UUID = (uuidv4() as any).replaceAll("-", "").slice(0, 15);
-
-  const credential = useRecoilValue(userCredential);
+  const { credential } = useCredential();
 
   const { register, handleSubmit: submit, setValue } = useForm<Form>();
 
@@ -83,11 +81,9 @@ export default function FormPendaftaran() {
   }, []);
 
   const handleSubmit = submit(async (data) => {
-    console.log(data);
-
     setLoading(true);
     try {
-      if (!!isEdit) {
+      if (isEdit) {
         await updateDoc(doc(db_firestore, "registers-list", idEdit!), {
           id: idEdit,
           fullname: data.fullname,
@@ -142,69 +138,49 @@ export default function FormPendaftaran() {
       >
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
           <div className="col-span-2 flex h-10 lg:h-14">
-            <label
-              htmlFor="fullname"
-              className="flex flex-col items-center justify-center bg-blue-400 rounded-l-md w-1/12"
-            >
-              <AiOutlineUser className="text-white text-sm lg:text-2xl" />
-            </label>
-            <input
+            <Input
               id="fullname"
-              type="text"
-              className="font-light text-base lg:text-lg w-full rounded-r-md border-none shadow-sm focus:ring-0 bg-gray-100 focus:border-none"
-              placeholder="Nama Lengkap"
               required
+              placeholder="Nama Lengkap"
               {...register("fullname")}
+              renderIcon={() => (
+                <AiOutlineUser className="text-white text-sm lg:text-2xl" />
+              )}
             />
           </div>
           <div className="col-span-2 flex h-10 lg:h-14">
-            <label
-              htmlFor="dob"
-              className="flex flex-col items-center justify-center bg-blue-400 rounded-l-md w-1/12"
-            >
-              <BsCalendarDate className="text-white text-sm lg:text-2xl" />
-            </label>
-            <input
+            <Input
               id="dob"
-              type="text"
-              className="font-light text-base lg:text-lg w-full rounded-r-md border-none shadow-sm focus:ring-0 bg-gray-100 focus:border-none"
-              placeholder="Tempat, tanggal lahir | cth: Jakarta, 12 Mei 2000"
               required
+              placeholder="Tempat, tanggal lahir | cth: Jakarta, 12 Mei 2000"
               {...register("dob")}
+              renderIcon={() => (
+                <BsCalendarDate className="text-white text-sm lg:text-2xl" />
+              )}
             />
           </div>
         </div>
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
           <div className="col-span-2 flex h-10 lg:h-14">
-            <label
-              htmlFor="origin_school"
-              className="flex flex-col items-center justify-center bg-blue-400 rounded-l-md w-1/12"
-            >
-              <TbSchool className="text-white text-sm lg:text-2xl" />
-            </label>
-            <input
+            <Input
               id="origin_school"
-              type="text"
-              className="font-light text-base lg:text-lg w-full rounded-r-md border-none shadow-sm focus:ring-0 bg-gray-100 focus:border-none"
-              placeholder="Sekolah asal"
               required
+              placeholder="Sekolah asal"
               {...register("origin_school")}
+              renderIcon={() => (
+                <TbSchool className="text-white text-sm lg:text-2xl" />
+              )}
             />
           </div>
           <div className="col-span-2 flex h-10 lg:h-14">
-            <label
-              htmlFor="address"
-              className="flex flex-col items-center justify-center bg-blue-400 rounded-l-md w-1/12"
-            >
-              <FaRegAddressCard className="text-white text-sm lg:text-2xl" />
-            </label>
-            <input
+            <Input
               id="address"
-              type="text"
-              className="font-light text-base lg:text-lg w-full rounded-r-md border-none shadow-sm focus:ring-0 bg-gray-100 focus:border-none"
-              placeholder="Alamat"
               required
+              placeholder="Alamat"
               {...register("address")}
+              renderIcon={() => (
+                <FaRegAddressCard className="text-white text-sm lg:text-2xl" />
+              )}
             />
           </div>
         </div>
@@ -218,7 +194,7 @@ export default function FormPendaftaran() {
             </label>
             <select
               id="gender"
-              className="font-light text-base lg:text-lg w-full rounded-r-md border-none shadow-sm focus:ring-0 bg-gray-100 focus:border-none"
+              className="font-light text-base lg:text-lg w-full rounded-r-md border-none shadow-sm focus:ring-0 bg-gray-100 foucs:bg-white focus:border-none"
               {...register("gender")}
             >
               <option value="male">Laki laki</option>
@@ -226,19 +202,17 @@ export default function FormPendaftaran() {
             </select>
           </div>
           <div className="col-span-2 flex h-10 lg:h-14">
-            <label
-              htmlFor="score"
-              className="flex flex-col items-center justify-center bg-blue-400 rounded-l-md w-1/12"
-            >
-              <AiOutlineFileText className="text-white text-sm lg:text-2xl" />
-            </label>
-            <input
+            <Input
               id="score"
-              type="number"
-              className="font-light text-base lg:text-lg w-full rounded-r-md border-none shadow-sm focus:ring-0 bg-gray-100 focus:border-none"
-              placeholder="Nilai ujian"
               required
+              type="number"
+              min={10}
+              max={100}
+              placeholder="Nilai Ujian"
               {...register("score_test")}
+              renderIcon={() => (
+                <FaRegAddressCard className="text-white text-sm lg:text-2xl" />
+              )}
             />
           </div>
         </div>
@@ -246,7 +220,7 @@ export default function FormPendaftaran() {
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
           <div className="col-span-4 flex flex-col gap-2">
             <textarea
-              className="font-light text-base lg:text-lg w-full rounded-r-md border-none shadow-sm focus:ring-0 bg-gray-100 focus:border-none"
+              className="font-light text-base lg:text-lg w-full rounded-r-md border-none shadow-sm focus:ring-0 focus:bg-white bg-gray-100 focus:border-none"
               {...register("quotes")}
               rows={6}
               placeholder="Quotes"

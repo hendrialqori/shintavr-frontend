@@ -1,29 +1,23 @@
 import { Link } from "react-router-dom";
 import {
-  getAuth,
   onAuthStateChanged,
   signInWithEmailAndPassword,
   signInWithPopup,
 } from "firebase/auth";
-import { app, googleProvider } from "@/configs/firebase";
+import { auth, googleProvider } from "@/configs/firebase";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { Loading } from "@/components/loading";
 import { AlreadyAuthPage } from "@/components/alreadyAuthPage";
-import { useSetRecoilState } from "recoil";
-import { userCredential, loginThrough } from "@/store";
 import { TfiEmail } from "react-icons/tfi";
 import { FiLock } from "react-icons/fi";
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
+import { useCredential } from "@/hooks/useCredential";
 
 export default function Login() {
+  const { setCredential } = useCredential();
+
   const [seePassword, setSeePassword] = useState(false);
-
-  const setUserCredential = useSetRecoilState(userCredential);
-
-  const setLoginThrough = useSetRecoilState(loginThrough);
-
-  const auth = getAuth(app);
 
   const [isVerify, setVerify] = useState(true);
 
@@ -68,18 +62,16 @@ export default function Login() {
   const handleLoginWithGoogle = async () => {
     try {
       await signInWithPopup(auth, googleProvider).then((result) => {
-        setUserCredential({
+        setCredential({
           id: result.user.email!,
           fullname: result.user.displayName!,
           password: "********",
           role: "student",
-          username: '-',
+          username: "-",
           authThrough: "google",
           email: result.user.email!,
           create_at: result.user.metadata.creationTime,
         });
-
-        setLoginThrough("google");
 
         window.localStorage.setItem("provider", "google");
 
@@ -97,7 +89,10 @@ export default function Login() {
       {isLoading ? <Loading /> : null}
 
       <div className="h-[100vh] w-full border-2 flex flex-col justify-center items-center">
-        <div className="p-4 w-full md:w-6/12 lg:w-4/12 rounded-md md:rounded-xl" aria-label="form-container">
+        <div
+          className="p-4 w-full md:w-6/12 lg:w-4/12 rounded-md md:rounded-xl"
+          aria-label="form-container"
+        >
           <h1 className="text-lg font-bold mb-8 text-center">
             Selamat datang:)
           </h1>

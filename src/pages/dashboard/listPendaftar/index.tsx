@@ -90,7 +90,7 @@ export default function ListPendaftar() {
   };
 
   const handleModalDelete = (
-    id: string = "",
+    id = "",
     name: string,
     type: "show" | "close"
   ) => {

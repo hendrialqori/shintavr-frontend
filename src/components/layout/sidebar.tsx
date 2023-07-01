@@ -6,20 +6,15 @@ import { VscFeedback } from "react-icons/vsc";
 import { Href } from "../href";
 import { Logout } from "@/pages/auth/logout";
 import { useEffect, useState } from "react";
-import { getAuth, signOut } from "firebase/auth";
+import { signOut } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
-import { useRecoilValue } from "recoil";
-import { userCredential } from "@/store";
 import { collection, onSnapshot } from "firebase/firestore";
-import { db_firestore } from "@/configs/firebase";
-import { Register } from "@/types";
-// import { FiMoon } from "react-icons/fi";
-// import { useMode } from "@/hooks/useMode";
+import { db_firestore, auth } from "@/configs/firebase";
+import { useCredential } from "@/hooks/useCredential";
+import type { Register } from "@/types";
 
 export const Sidebar = () => {
-  // const { toogleMode } = useMode();
-
-  const credential = useRecoilValue(userCredential);
+  const { credential } = useCredential();
 
   const [temporaryRegisterData, setTemporaryRegisterData] = useState<
     Register[]
@@ -34,8 +29,6 @@ export const Sidebar = () => {
   const [haveRegisterId, setHaveRegisterId] = useState("");
 
   const navigate = useNavigate();
-
-  const auth = getAuth();
 
   useEffect(() => {
     const unSubscribe = onSnapshot(
@@ -59,7 +52,9 @@ export const Sidebar = () => {
 
   useEffect(() => {
     const isHaveRegisterData = temporaryRegisterData.find(
-      (d) => d.creator_id === credential.username || d.creator_id === credential.email
+      (d) =>
+        d.creator_id === credential.username ||
+        d.creator_id === credential.email
     );
 
     if (isHaveRegisterData) {

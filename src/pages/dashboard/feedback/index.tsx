@@ -62,8 +62,8 @@ export default function Feedback() {
   }, []);
 
   const handleModalEdit = (
-    id: string = "",
-    message: string = "",
+    id = "",
+    message = "",
     type: "show" | "close"
   ) => {
     if (type === "show") {
@@ -82,8 +82,8 @@ export default function Feedback() {
   };
 
   const handleModalDelete = (
-    id: string = "",
-    person: string = "",
+    id = "",
+    person = "",
     type: "show" | "close"
   ) => {
     if (type === "show") {
@@ -127,7 +127,7 @@ export default function Feedback() {
             placeholder="Cari nama pendaftar"
           />
         </div>
-        {credential.role === "student" ? (
+        {credential.role !== "superadmin" ? (
           <button
             onClick={() => navigate("/profile")}
             className="bg-blue-400 py-2 px-4 rounded-xl text-white font-semibold"

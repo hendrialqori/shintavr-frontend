@@ -51,8 +51,8 @@ export const Announcement = () => {
   }, []);
 
   const handleModalEdit = (
-    id: string = "",
-    message: string = "",
+    id = "",
+    message = "",
     type: "show" | "close"
   ) => {
     if (type === "show") {
@@ -70,7 +70,7 @@ export const Announcement = () => {
     }
   };
 
-  const handleModalDelete = (id: string = "", type: "show" | "close") => {
+  const handleModalDelete = (id = "", type: "show" | "close") => {
     if (type === "show") {
       setDelete({
         id: id,

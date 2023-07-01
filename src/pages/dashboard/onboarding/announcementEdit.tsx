@@ -1,6 +1,5 @@
 import { ModalWrapper } from "@/components/modalWrapper";
 import { ModalChildrenWrapper } from "@/components/modalChildenWrapper";
-
 import { useForm } from "react-hook-form";
 import { doc, updateDoc } from "firebase/firestore";
 import { db_firestore } from "@/configs/firebase";

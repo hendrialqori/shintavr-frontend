@@ -26,11 +26,11 @@ export const BerkasDelete = ({ id, name, closeModal, setLoading }: Props) => {
     <>
       <ModalWrapper>
         <ModalChildrenWrapper>
-          <h1 className="text-lg text-center">
+          <h1 className="text-lg text-center py-2">
             Anda yakin ingin menghapus data dari <br />{" "}
             <span className="font-semibold">{name}</span> ?
           </h1>
-          <div className="grid grid-cols-2 gap-2 mt-4">
+          <div className="flex gap-2 mt-4 w-6/12 mx-auto pb-3">
             <button
               className="bg-gray-300 w-full py-2 rounded-md"
               onClick={closeModal}

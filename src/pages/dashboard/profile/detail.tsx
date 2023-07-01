@@ -1,18 +1,15 @@
-// import { AiFillEdit } from "react-icons/ai";
-// import { BsPersonCircle } from "react-icons/bs";
 import { collection, addDoc, updateDoc, doc } from "firebase/firestore";
 import { db_firestore } from "@/configs/firebase";
 import { useState } from "react";
 import { Loading } from "@/components/loading";
 import { useNavigate } from "react-router-dom";
-import { useRecoilValue } from "recoil";
-import { userCredential } from "@/store";
 import dayjs from "dayjs";
+import { useCredential } from "@/hooks/useCredential";
 
 export const Detail = () => {
   const navigate = useNavigate();
 
-  const credential = useRecoilValue(userCredential);
+  const { credential } = useCredential();
 
   const [isLoading, setLoading] = useState(false);
 
@@ -72,19 +69,6 @@ export const Detail = () => {
     <>
       {isLoading ? <Loading /> : null}
       <div>
-        {/* <div
-          className="h-40 rounded-lg rounded-t-[40px] relative"
-          aria-label="banner"
-        >
-          <div
-            className="h-20 w-20 rounded-full flex justify-center items-center absolute left-6 md:left-10 lg:left-12 bottom-5 lg:-bottom-10"
-            aria-label="avatar"
-          >
-            <div className="text-[5rem] md:text-[7rem] lg:text-[8rem] bg-blue-300 rounded-full text-white" aria-label="banner">
-              <BsPersonCircle />
-            </div>
-          </div>
-        </div> */}
         <div className="mt-7 md:mt-10 flex flex-col gap-4">
           <div className="grid grid-cols-8 gap-x-2 gap-y-7">
             <div className="col-span-4 lg:col-span-2 flex flex-col gap-1 items-center">

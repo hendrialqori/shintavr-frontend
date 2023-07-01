@@ -1,6 +1,5 @@
 import { ComponentProps } from "react";
 
-
 type Props = ComponentProps<"input"> & {
   names: string
 }

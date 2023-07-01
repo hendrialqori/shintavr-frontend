@@ -1,18 +1,31 @@
-type Props = {
-  title: string;
-} & React.ComponentProps<"input">;
+import { forwardRef } from "react";
+import { cn } from "@/utils/classNames";
 
-export const Input = ({ title, ...rest }: Props) => {
-  return (
-    <div className="flex flex-col gap-1" aria-label={`${title}-field`}>
-      <label className="font-light tracking-wide" htmlFor={title}>
-        {title}
-      </label>
-      <input
-        {...rest}
-        className="p-2 text-lg rounded-md bg-gray-200 focus:border-blue-100 border-none"
-        id={title}
-      />
-    </div>
-  );
+type Props = React.ComponentProps<"input"> & {
+  renderIcon: () => React.ReactNode;
 };
+
+export const Input = forwardRef<HTMLInputElement, Props>(
+  ({ renderIcon, id, ...rest }, ref) => {
+    return (
+      <>
+        <label
+          htmlFor={id}
+          className="flex flex-col items-center justify-center bg-blue-400 rounded-l-md w-1/12"
+        >
+          {renderIcon()}
+        </label>
+        <input
+          ref={ref}
+          id={id}
+          className={cn(
+            "font-light text-base lg:text-lg w-full",
+            "px-2 rounded-r-md border-none shadow-sm bg-gray-100",
+            "focus:outline-0 focus:bg-white focus:ring-0 focus:border-none"
+          )}
+          {...rest}
+        />
+      </>
+    );
+  }
+);
